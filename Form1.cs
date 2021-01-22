@@ -103,6 +103,7 @@ namespace Projet_Cavalier
             }
         }
 
+        // choix de la case
         private async void Mon_Bouton_Click(object sender, EventArgs e)
         {   // mettre async pour utiliser await 
 
@@ -116,8 +117,6 @@ namespace Projet_Cavalier
                 for (j = 0; j < 12; j++)
                     echec[i, j] = ((i < 2 | i > 9 | j < 2 | j > 9) ? -1 : 0);
 
-            echiquier[ii, jj].BackgroundImage = null;
-            echiquier[ii, jj].Text = "1";
             i = ii; j = jj;
             echec[i, j] = 1;
 
@@ -194,7 +193,8 @@ namespace Projet_Cavalier
                 }
 
                 echiquier[i, j].BackgroundImage = null;
-                echiquier[i, j].Text = "" + (k - 1);
+                if(k == 2 || k % 5 == 1)
+                    echiquier[i, j].Text = "" + (k - 1);
                 for (l = 0, min_fuite = 11; l < 8; l++)
                 {
                     ii = i + depi[l]; jj = j + depj[l];
@@ -212,20 +212,24 @@ namespace Projet_Cavalier
                 }
                 i += depi[lmin_fuite]; j += depj[lmin_fuite];
                 echec[i, j] = k;
-                echiquier[i, j].BackgroundImage = cavalier;
-                await Task.Delay(1000);
+                if (k % 5 == 0 || k == 64)
+                {
+                    echiquier[i, j].BackgroundImage = cavalier;
+                    await Task.Delay(1000);
+                }
             }
 
-
+            /*
             for (i = 2; i < 10; i++)
-
             {
                 for (j = 2; j < 10; j++)
                 {
+
                     echiquier[i, j].Visible = true;
                 }
 
             }
+            */
 
         }
     }
