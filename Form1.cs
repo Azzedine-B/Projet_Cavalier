@@ -37,7 +37,6 @@ namespace Projet_Cavalier
         private void button1_Click(object sender, EventArgs e)
         {
             effacerEchiquier();
-
             // on récupère les valeur de la simulation précédente
             jouer(gardeI, gardeJ, 1000, 1);
 
@@ -53,11 +52,9 @@ namespace Projet_Cavalier
             int iR = random.Next(1, 8) + 1;
             int jR = random.Next(1, 8) + 1;
             // iR et jR evoluent de 2 à 9 !
-            
-
+           
             gardeI = iR;
             gardeJ = jR;
-
 
             jouer(iR,jR, 1000, 1);
         }
@@ -104,7 +101,6 @@ namespace Projet_Cavalier
             gardeJ = trouverJ(sender, echiquier);
 
             jouer(trouverI(sender, echiquier), trouverJ(sender, echiquier), 1000, 1);
-
         }
 
 
