@@ -18,6 +18,7 @@ namespace Projet_Cavalier
         Button[,] echiquier;
         Image cavalier;
         bool pause = false;
+        int gardeI = 0, gardeJ = 0;
 
         /* Echiqiuer console */
         static int[,] echec = new int[12, 12];
@@ -26,53 +27,39 @@ namespace Projet_Cavalier
         int nb_fuite, min_fuite, lmin_fuite = 0;
         int i, j, k, l, ii, jj;
 
+        // mettre en pause le jeu a n'importe quel moment
         private void button4_Click(object sender, EventArgs e)
         {
             pause = !pause;
         }
 
-        private async void button1_Click(object sender, EventArgs e)
-        { // joue la simulation précédente
-
+        // joue la simulation précédente
+        private void button1_Click(object sender, EventArgs e)
+        {
             effacerEchiquier();
 
-            for (int i = 2; i < 10; i++)
-            {
-                for (int j = 2; j < 10; j++)
-                {
-                    echiquier[i, j].Visible = true;
-                    await Task.Delay(1000);
-                }
-            } 
+            // on récupère les valeur de la simulation précédente
+            jouer(gardeI, gardeJ, 1000, 1);
 
         }
 
         //mode aléatoire
-        private async void button5_Click(object sender, EventArgs e)
+        private void button5_Click(object sender, EventArgs e)
         {
+
+            effacerEchiquier();
+            
             Random random = new Random();
-            ii = random.Next(1, 8);
-            jj = random.Next(1, 8);
-            // ii et jj evoluent de 1 à 8 !
+            int iR = random.Next(1, 8) + 1;
+            int jR = random.Next(1, 8) + 1;
+            // iR et jR evoluent de 2 à 9 !
             
 
-            for (i = 0; i < 12; i++)
-                for (j = 0; j < 12; j++)
-                    echec[i, j] = ((i < 2 | i > 9 | j < 2 | j > 9) ? -1 : 0);
+            gardeI = iR;
+            gardeJ = jR;
 
 
-           
-            //echiquier[ii, jj].BackgroundImage = null;
-            //echiquier[ii, jj].Text = "1";
-            i = ii + 1; j = jj +1;
-            echec[i, j] = 1;
-            echiquier[i, j].BackgroundImage = cavalier;
-            await Task.Delay(1000);
-
-
-            jouer();
-
-
+            jouer(iR,jR, 1000, 1);
         }
 
         public Form1()
@@ -104,23 +91,16 @@ namespace Projet_Cavalier
         }
 
         // choix de la case
-        private async void Mon_Bouton_Click(object sender, EventArgs e)
-        {   // mettre async pour utiliser await 
+        private void Mon_Bouton_Click(object sender, EventArgs e)
+        {  
 
-            ii = trouverI(sender, echiquier);
-            jj = trouverJ(sender, echiquier);
-            // le cavalier s'affiche sur la case selectionnée
-            echiquier[ii, jj].BackgroundImage = cavalier;
-            await Task.Delay(1000);
+            effacerEchiquier();
 
-            for (i = 0; i < 12; i++)
-                for (j = 0; j < 12; j++)
-                    echec[i, j] = ((i < 2 | i > 9 | j < 2 | j > 9) ? -1 : 0);
+            // stocke les valeurs pour rejouer la simulation 
+            gardeI = trouverI(sender, echiquier);
+            gardeJ = trouverJ(sender, echiquier);
 
-            i = ii; j = jj;
-            echec[i, j] = 1;
-
-            jouer();
+            jouer(trouverI(sender, echiquier), trouverJ(sender, echiquier), 1000, 1);
 
         }
 
@@ -180,8 +160,19 @@ namespace Projet_Cavalier
             return (n == 0) ? 9 : n;
         }
 
-        public async void jouer()
+        public async void jouer(int ip, int jp, int duree, int pas)
         {
+            for (i = 0; i < 12; i++)
+                for (j = 0; j < 12; j++)
+                    echec[i, j] = ((i < 2 | i > 9 | j < 2 | j > 9) ? -1 : 0);
+
+
+            echec[ip, jp] = 1;
+            echiquier[ip, jp].BackgroundImage = cavalier;
+            await Task.Delay(duree);
+
+           
+            
 
 
             for (k = 2; k <= 64; k++)
@@ -192,12 +183,12 @@ namespace Projet_Cavalier
                     Application.DoEvents();
                 }
 
-                echiquier[i, j].BackgroundImage = null;
-                if(k == 2 || k % 5 == 1)
-                    echiquier[i, j].Text = "" + (k - 1);
+                echiquier[ip, jp].BackgroundImage = null;
+                if(k == 2 || k % pas == 1 || k % pas == 0)
+                    echiquier[ip, jp].Text = "" + (k - 1);
                 for (l = 0, min_fuite = 11; l < 8; l++)
                 {
-                    ii = i + depi[l]; jj = j + depj[l];
+                    ii = ip + depi[l]; jj = jp + depj[l];
 
                     nb_fuite = ((echec[ii, jj] != 0) ? 10 : fuite(ii, jj));
 
@@ -210,26 +201,15 @@ namespace Projet_Cavalier
                 {
                     break;
                 }
-                i += depi[lmin_fuite]; j += depj[lmin_fuite];
-                echec[i, j] = k;
-                if (k % 5 == 0 || k == 64)
+                ip += depi[lmin_fuite]; jp += depj[lmin_fuite];
+                echec[ip, jp] = k;
+                if (k % pas == 0 || k == 64)
                 {
-                    echiquier[i, j].BackgroundImage = cavalier;
-                    await Task.Delay(1000);
+                    echiquier[ip, jp].BackgroundImage = cavalier;
+                    await Task.Delay(duree);
                 }
             }
 
-            /*
-            for (i = 2; i < 10; i++)
-            {
-                for (j = 2; j < 10; j++)
-                {
-
-                    echiquier[i, j].Visible = true;
-                }
-
-            }
-            */
 
         }
     }
