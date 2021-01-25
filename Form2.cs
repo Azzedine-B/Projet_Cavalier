@@ -12,7 +12,7 @@ namespace Projet_Cavalier
 {
     public partial class Form2 : Form
     {
-        
+
         static int[,] echec = new int[12, 12];
         static int[] depi = new int[] { 2, 1, -1, -2, -2, -1, 1, 2 };
         static int[] depj = new int[] { 1, 2, 2, 1, -1, -2, -2, -1 };
@@ -29,9 +29,9 @@ namespace Projet_Cavalier
 
         /* Initialisation */
         Form3 azzedine = new Form3();
-        int[,] derniersCoups = new int[2,5];
-        
-        
+        int[,] derniersCoups = new int[2, 5];
+
+
 
         /** Joue la simulation précédente 
          * Efface l'échiquier
@@ -111,10 +111,11 @@ namespace Projet_Cavalier
             //effacerEchiquier();
             cptTour++;
             // stocke les valeurs pour rejouer la simulation 
-            
-            if(cptTour > 1)
+
+            if (cptTour > 1)
             {
-                if (echiquier[trouverI(sender,echiquier),trouverJ(sender,echiquier)].Text == "X") { 
+                if (echiquier[trouverI(sender, echiquier), trouverJ(sender, echiquier)].Text == "X")
+                {
                     jouerModeJoueur(trouverI(sender, echiquier), trouverJ(sender, echiquier));
                 }
             }
@@ -164,7 +165,7 @@ namespace Projet_Cavalier
         }
 
         /** Fonction de recherche de fuite 
-         */ 
+         */
         static int fuite(int i, int j)
         {
             int n, l;
@@ -175,7 +176,7 @@ namespace Projet_Cavalier
             return (n == 0) ? 9 : n;
         }
 
-       
+
         public async void jouer(int ip, int jp)
         {
             echec[ip, jp] = 1;
@@ -226,19 +227,19 @@ namespace Projet_Cavalier
                 return true;
             }
             else return false;
-                        
+
         }
 
-        public async void jouerModeJoueur(int ip, int jp, int duree, int pas)
+        public async void jouerModeJoueur(int ip, int jp)
         {
 
-            if (CoupPossible(ip, jp))
+            if (coupPossible(ip, jp))
             {
                 echiquier[ip, jp].BackgroundImage = cavalier;
                 echiquier[ip, jp].Enabled = false;
                 echiquier[ii, jj].Text = "X";
             }
-            else jouerModeJoueur(ip,jp);
+            else jouerModeJoueur(ip, jp);
 
             for (l = 0; l < 8; l++)
             {
@@ -274,35 +275,35 @@ namespace Projet_Cavalier
                 //    echiquier[ip, jp].Text = "" + (k - 1);
 
 
-                }
-                /*
-                //nb_fuite = ((echec[ii, jj] != 0) ? 10 : fuite(ii, jj));
+            }
+            /*
+            //nb_fuite = ((echec[ii, jj] != 0) ? 10 : fuite(ii, jj));
 
-                if (nb_fuite < min_fuite)
-                {
-                    min_fuite = nb_fuite; lmin_fuite = l;
-                }
-
-
-            //impasse
-            if (min_fuite == 9 & k != 64)
+            if (nb_fuite < min_fuite)
             {
-                label1.Text = "Impasse !!";
-                break;
-            }
-            ip += depi[lmin_fuite]; jp += depj[lmin_fuite];
-            echec[ip, jp] = k;
-            if (k % pas == 0 || k == 64)
-            {
-                echiquier[ip, jp].BackgroundImage = cavalier;
-                await Task.Delay(duree);
+                min_fuite = nb_fuite; lmin_fuite = l;
             }
 
-            }
-               
-            }
-        
-        }   
+
+        //impasse
+        if (min_fuite == 9 & k != 64)
+        {
+            label1.Text = "Impasse !!";
+            break;
+        }
+        ip += depi[lmin_fuite]; jp += depj[lmin_fuite];
+        echec[ip, jp] = k;
+        if (k % pas == 0 || k == 64)
+        {
+            echiquier[ip, jp].BackgroundImage = cavalier;
+            await Task.Delay(duree);
+        }
+            */
+
+
+
+        }
     }
+}
 
 
