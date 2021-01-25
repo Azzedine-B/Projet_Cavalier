@@ -214,6 +214,8 @@ namespace Projet_Cavalier
         public async void jouerModeJoueur(int ip, int jp, int duree, int pas)
         {
             echiquier[ip, jp].BackgroundImage = cavalier;
+            echiquier[ip, jp].Enabled =false;
+
             //await Task.Delay(duree);
             //while (cptTour < 64)
             /*
@@ -224,8 +226,6 @@ namespace Projet_Cavalier
                 //incrémenter le compteur 
             }
             */
-            echiquier[ip, jp].BackgroundImage = cavalier;
-
             for (k = 2; k <= 64; k++)
             {
 
