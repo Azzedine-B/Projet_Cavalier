@@ -24,7 +24,7 @@ namespace Projet_Cavalier
         Image cavalier;
         bool pause = false;
         int gardeI = 0, gardeJ = 0;
-        int cptTour = 0;
+        int cptTour;
 
 
         /* Initialisation */
@@ -53,7 +53,7 @@ namespace Projet_Cavalier
          */
         private void Form2_Load(object sender, EventArgs e)
         {
-            
+            this.cptTour = 0;
             this.cavalier = Image.FromFile("img\\cavalier.jpg");
             this.echiquier = new Button[12, 12];
             //initialisation des cases d'échecs
@@ -108,13 +108,18 @@ namespace Projet_Cavalier
 
         private void Mon_Bouton_Click(object sender, EventArgs e)
         {
-            effacerEchiquier();
-
+            //effacerEchiquier();
+            cptTour++;
             // stocke les valeurs pour rejouer la simulation 
+            
+            if(cptTour > 1)
+            {
+                if (echiquier[trouverI(sender,echiquier),trouverJ(sender,echiquier)].Text == "X") { 
+                    jouerModeJoueur(trouverI(sender, echiquier), trouverJ(sender, echiquier));
+                }
+            }
             gardeI = trouverI(sender, echiquier);
             gardeJ = trouverJ(sender, echiquier);
-
-            jouerModeJoueur(trouverI(sender, echiquier), trouverJ(sender, echiquier), 1000, 1);
         }
 
         //effacer toutes les cases de l'échiquier
@@ -213,21 +218,42 @@ namespace Projet_Cavalier
                 }
             }
         }
-        
 
         public Boolean coupPossible(int x, int y)
         {
             if (echec[x, y] != -1)
             {
-                return true; 
+                return true;
             }
             else return false;
+                        
         }
-
 
         public async void jouerModeJoueur(int ip, int jp, int duree, int pas)
         {
-            echiquier[ip, jp].BackgroundImage = cavalier;
+
+            if (CoupPossible(ip, jp))
+            {
+                echiquier[ip, jp].BackgroundImage = cavalier;
+                echiquier[ip, jp].Enabled = false;
+                echiquier[ii, jj].Text = "X";
+            }
+            else jouerModeJoueur(ip,jp);
+
+            for (l = 0; l < 8; l++)
+            {
+                ii = ip + depi[l]; jj = jp + depj[l];
+            }
+            /*
+            for (coupPossible(ip,jp)
+            {
+                ii = ip + depi[l]; jj = jp + depj[l];
+                //if (coupPossible(ii, jj))
+                    echiquier[ii, jj].Text = "X";
+
+            }
+            */
+
             //await Task.Delay(duree);
             //while (cptTour < 64)
             /*
@@ -238,6 +264,7 @@ namespace Projet_Cavalier
                 //incrémenter le compteur 
             }
             */
+            echiquier[ip, jp].BackgroundImage = cavalier;
 
             for (k = 2; k <= 64; k++)
             {
@@ -246,14 +273,9 @@ namespace Projet_Cavalier
                 //if (k == 2 || k % pas == 1 || k % pas == 0)
                 //    echiquier[ip, jp].Text = "" + (k - 1);
 
-                for (l = 0, min_fuite = 11; l < 8; l++)
-                {
-                    ii = ip + depi[l]; jj = jp + depj[l];
-                    if (coupPossible(ii, jj))
-                        echiquier[ii, jj].Text = "X";
 
                 }
-            
+                /*
                 //nb_fuite = ((echec[ii, jj] != 0) ? 10 : fuite(ii, jj));
 
                 if (nb_fuite < min_fuite)
