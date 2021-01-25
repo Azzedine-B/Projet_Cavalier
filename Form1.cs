@@ -88,6 +88,8 @@ namespace Projet_Cavalier
             //a changer de place mais me permet de charger l'autre fenêtre
             Form2 ModeJeu = new Form2();
             ModeJeu.Show();
+            Form3 azzedine = new Form3();
+            azzedine.Show();
         }
 
         // choix de la case

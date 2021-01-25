@@ -12,6 +12,7 @@ namespace Projet_Cavalier
 {
     public partial class Form2 : Form
     {
+        
         static int[,] echec = new int[12, 12];
         static int[] depi = new int[] { 2, 1, -1, -2, -2, -1, 1, 2 };
         static int[] depj = new int[] { 1, 2, 2, 1, -1, -2, -2, -1 };
@@ -27,7 +28,10 @@ namespace Projet_Cavalier
 
 
         /* Initialisation */
+        Form3 azzedine = new Form3();
         int[,] derniersCoups = new int[2,5];
+        
+        
 
         /** Joue la simulation précédente 
          * Efface l'échiquier
@@ -37,7 +41,7 @@ namespace Projet_Cavalier
         {
             effacerEchiquier();
             // on récupère les valeur de la simulation précédente
-            jouer(gardeI, gardeJ, 1000, 1);
+            jouer(gardeI, gardeJ);
         }
 
         /** Initialise au load
@@ -49,6 +53,7 @@ namespace Projet_Cavalier
          */
         private void Form2_Load(object sender, EventArgs e)
         {
+            
             this.cavalier = Image.FromFile("img\\cavalier.jpg");
             this.echiquier = new Button[12, 12];
             //initialisation des cases d'échecs
@@ -73,11 +78,17 @@ namespace Projet_Cavalier
             }
         }
 
+
         public Form2()
         {
             InitializeComponent();
         }
-        
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            azzedine.Show();
+        }
+
         //mode aléatoire
         /** Q : semble générer les valeurs aléatoire pour i et j
          * Pourquoi initialisation dans la méthode et pas au début du main (cf version console)
@@ -159,11 +170,12 @@ namespace Projet_Cavalier
             return (n == 0) ? 9 : n;
         }
 
-        public async void jouer(int ip, int jp, int duree, int pas)
+       
+        public async void jouer(int ip, int jp)
         {
             echec[ip, jp] = 1;
             echiquier[ip, jp].BackgroundImage = cavalier;
-            await Task.Delay(duree);
+
 
             for (k = 2; k <= 64; k++)
             {
@@ -174,7 +186,7 @@ namespace Projet_Cavalier
                 }
 
                 echiquier[ip, jp].BackgroundImage = null;
-                if (k == 2 || k % pas == 1 || k % pas == 0)
+                if (k == 2 || k % 1 == 1 || k % 1 == 0)
                     echiquier[ip, jp].Text = "" + (k - 1);
                 for (l = 0, min_fuite = 11; l < 8; l++)
                 {
@@ -194,13 +206,14 @@ namespace Projet_Cavalier
                 }
                 ip += depi[lmin_fuite]; jp += depj[lmin_fuite];
                 echec[ip, jp] = k;
-                if (k % pas == 0 || k == 64)
+                if (k % 1 == 0 || k == 64)
                 {
                     echiquier[ip, jp].BackgroundImage = cavalier;
-                    await Task.Delay(duree);
+                    await Task.Delay(0);
                 }
             }
         }
+        
 
         public Boolean coupPossible(int x, int y)
         {
@@ -210,6 +223,7 @@ namespace Projet_Cavalier
             }
             else return false;
         }
+
 
         public async void jouerModeJoueur(int ip, int jp, int duree, int pas)
         {
@@ -224,7 +238,6 @@ namespace Projet_Cavalier
                 //incrémenter le compteur 
             }
             */
-            echiquier[ip, jp].BackgroundImage = cavalier;
 
             for (k = 2; k <= 64; k++)
             {
@@ -240,7 +253,7 @@ namespace Projet_Cavalier
                         echiquier[ii, jj].Text = "X";
 
                 }
-                /*
+            
                 //nb_fuite = ((echec[ii, jj] != 0) ? 10 : fuite(ii, jj));
 
                 if (nb_fuite < min_fuite)
@@ -264,9 +277,10 @@ namespace Projet_Cavalier
             }
 
             }
-                */
+               
             }
+        
         }   
     }
 
-}
+
