@@ -12,23 +12,26 @@ namespace Projet_Cavalier
 {
     public partial class Form2 : Form
     {
-        /* Echiquier graphique */
+        static int[,] echec = new int[12, 12];
+        static int[] depi = new int[] { 2, 1, -1, -2, -2, -1, 1, 2 };
+        static int[] depj = new int[] { 1, 2, 2, 1, -1, -2, -2, -1 };
+
+        /* Définitions et déclarations */
+        int nb_fuite, min_fuite, lmin_fuite = 0;
+        int i, j, k, l, ii, jj;
         Button[,] echiquier;
         Image cavalier;
         bool pause = false;
         int gardeI = 0, gardeJ = 0;
-        bool coupPossible;
+        //bool coupPossible;
 
-        /* Echiqiuer console */
-        static int[,] echec = new int[12, 12];
-        static int[] depi = new int[] { 2, 1, -1, -2, -2, -1, 1, 2 };
-        static int[] depj = new int[] { 1, 2, 2, 1, -1, -2, -2, -1 };
-        int nb_fuite, min_fuite, lmin_fuite = 0;
-        int i, j, k, l, ii, jj;
-
+        /* Initialisation */
         int[,] derniersCoups = new int[2,5];
 
-        //joue la simulation précédente
+        /** Joue la simulation précédente 
+         * Efface l'échiquier
+         * Joue un jeu avec les données de la simulation précédente stockées dans gardeI, gardeJ
+         */
         private void button2_Click(object sender, EventArgs e)
         {
             effacerEchiquier();
@@ -36,10 +39,16 @@ namespace Projet_Cavalier
             jouer(gardeI, gardeJ, 1000, 1);
         }
 
+        /** Initialise au load
+         * Initialise l'échiquier comme un tableau 2D de boutons 12 * 12
+         * Fixe la taille des boutons 
+         * Q : Mon_Bouton_Click = bouton pour choisir case de départ ? 
+         * Q : boucle pour rendre les boutons visibles ? Pourquoi ces valeurs ? 
+         * + Q : this controls.add
+         */
         private void Form2_Load(object sender, EventArgs e)
         {
             this.cavalier = Image.FromFile("img\\cavalier.jpg");
-
             this.echiquier = new Button[12, 12];
             // initialisation des boutton de l'échiquier
             for (int l = 0; l < 12; l++)
@@ -65,7 +74,9 @@ namespace Projet_Cavalier
         }
         
         //mode aléatoire
-      
+        /** Q : semble générer les valeurs aléatoire pour i et j
+         * Pourquoi initialisation dans la méthode et pas au début du main (cf version console)
+         */
         private void button1_Click(object sender, EventArgs e)
         {
             effacerEchiquier();
@@ -76,7 +87,6 @@ namespace Projet_Cavalier
 
             gardeI = iR;
             gardeJ = jR;
-
             //jouer(iR, jR, 1000, 1);
         }
 
@@ -84,21 +94,18 @@ namespace Projet_Cavalier
         public void effacerEchiquier()
         {
             for (int i = 2; i < 10; i++)
-
             {
                 for (int j = 2; j < 10; j++)
                 {
                     echiquier[i, j].Text = "";
                     echiquier[i, j].BackgroundImage = null;
                 }
-
             }
         }
 
         // trouve la valeur de i dans un tableau 2d
         static int trouverI(object o, Button[,] b)
         {
-
             for (int i = 2; i < 10; i++)
             {
                 for (int j = 2; j < 10; j++)
@@ -124,6 +131,8 @@ namespace Projet_Cavalier
             return 0;
         }
 
+        /** Fonction de recherche de fuite 
+         */ 
         static int fuite(int i, int j)
         {
             int n, l;
