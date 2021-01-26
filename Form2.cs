@@ -12,20 +12,18 @@ namespace Projet_Cavalier
 {
     public partial class Form2 : Form
     {
-
         static int[,] echec = new int[12, 12];
         static int[] depi = new int[] { 2, 1, -1, -2, -2, -1, 1, 2 };
         static int[] depj = new int[] { 1, 2, 2, 1, -1, -2, -2, -1 };
 
         /* Définitions et déclarations */
         int nb_fuite, min_fuite, lmin_fuite = 0;
-        int i, j, k, l, ii, jj;
+        int i, j, k, l, ii, jj, saisieI, saisieJ;
         Button[,] echiquier;
         Image cavalier;
         bool pause = false;
         int gardeI = 0, gardeJ = 0;
         int cptTour;
-
 
         /* Initialisation */
         Form3 azzedine = new Form3();
@@ -78,7 +76,6 @@ namespace Projet_Cavalier
             }
         }
 
-
         public Form2()
         {
             InitializeComponent();
@@ -90,9 +87,6 @@ namespace Projet_Cavalier
         }
 
         //mode aléatoire
-        /** Q : semble générer les valeurs aléatoire pour i et j
-         * Pourquoi initialisation dans la méthode et pas au début du main (cf version console)
-         */
         private void button1_Click(object sender, EventArgs e)
         {
             effacerEchiquier();
@@ -108,19 +102,89 @@ namespace Projet_Cavalier
 
         private void Mon_Bouton_Click(object sender, EventArgs e)
         {
-            //effacerEchiquier();
-            cptTour++;
-            // stocke les valeurs pour rejouer la simulation 
 
-            if (cptTour > 1)
-            {
-                if (echiquier[trouverI(sender, echiquier), trouverJ(sender, echiquier)].Text == "X")
+            saisieI = trouverI(sender, echiquier);
+            saisieJ = trouverJ(sender, echiquier);
+
+            if (coupPossible(saisieI, saisieJ))
                 {
-                    jouerModeJoueur(trouverI(sender, echiquier), trouverJ(sender, echiquier));
+                effacerEchiquier();
+                jouerModeJoueur(saisieI,saisieJ);
+            }
+
+            //gardeI = trouverI(sender, echiquier);
+            //gardeJ = trouverJ(sender, echiquier);
+        }
+
+        /** Fonction de jeu
+         * Passe l'image de la case sur cavalier et empêche de la jouer a nouveau
+         */
+        public async void jouerModeJoueur(int ip, int jp)
+        {
+            cptTour++;
+            echiquier[saisieI, saisieJ].BackgroundImage = cavalier;
+            echiquier[saisieI, saisieJ].Enabled = false;
+
+            for (l = 0; l < 8; l++)
+            {
+                ii = ip + depi[l]; jj = jp + depj[l];
+                echiquier[ii, jj].Text = "X";
+            }
+        }
+
+
+        public Boolean coupPossible(int x, int y)
+        {
+            if (echec[x, y] != -1)
+            {
+                return true;
+            }
+            else if (cptTour > 1 && echiquier[saisieI, saisieJ].Text != "X")
+                return false;
+            else return false;
+
+        }
+        public async void jouer(int ip, int jp)
+        {
+            echec[ip, jp] = 1;
+            echiquier[ip, jp].BackgroundImage = cavalier;
+
+
+            for (k = 2; k <= 64; k++)
+            {
+                // met en pause l'application
+                while (pause)
+                {
+                    Application.DoEvents();
+                }
+
+                echiquier[ip, jp].BackgroundImage = null;
+                if (k == 2 || k % 1 == 1 || k % 1 == 0)
+                    echiquier[ip, jp].Text = "" + (k - 1);
+                for (l = 0, min_fuite = 11; l < 8; l++)
+                {
+                    ii = ip + depi[l]; jj = jp + depj[l];
+
+                    nb_fuite = ((echec[ii, jj] != 0) ? 10 : fuite(ii, jj));
+
+                    if (nb_fuite < min_fuite)
+                    {
+                        min_fuite = nb_fuite; lmin_fuite = l;
+                    }
+                }
+                if (min_fuite == 9 & k != 64)
+                {
+                    label1.Text = "Impasse !!";
+                    break;
+                }
+                ip += depi[lmin_fuite]; jp += depj[lmin_fuite];
+                echec[ip, jp] = k;
+                if (k % 1 == 0 || k == 64)
+                {
+                    echiquier[ip, jp].BackgroundImage = cavalier;
+                    await Task.Delay(0);
                 }
             }
-            gardeI = trouverI(sender, echiquier);
-            gardeJ = trouverJ(sender, echiquier);
         }
 
         //effacer toutes les cases de l'échiquier
@@ -174,134 +238,6 @@ namespace Projet_Cavalier
                 if (echec[i + depi[l], j + depj[l]] != 0) n--;
 
             return (n == 0) ? 9 : n;
-        }
-
-
-        public async void jouer(int ip, int jp)
-        {
-            echec[ip, jp] = 1;
-            echiquier[ip, jp].BackgroundImage = cavalier;
-
-
-            for (k = 2; k <= 64; k++)
-            {
-                // met en pause l'application
-                while (pause)
-                {
-                    Application.DoEvents();
-                }
-
-                echiquier[ip, jp].BackgroundImage = null;
-                if (k == 2 || k % 1 == 1 || k % 1 == 0)
-                    echiquier[ip, jp].Text = "" + (k - 1);
-                for (l = 0, min_fuite = 11; l < 8; l++)
-                {
-                    ii = ip + depi[l]; jj = jp + depj[l];
-
-                    nb_fuite = ((echec[ii, jj] != 0) ? 10 : fuite(ii, jj));
-
-                    if (nb_fuite < min_fuite)
-                    {
-                        min_fuite = nb_fuite; lmin_fuite = l;
-                    }
-                }
-                if (min_fuite == 9 & k != 64)
-                {
-                    label1.Text = "Impasse !!";
-                    break;
-                }
-                ip += depi[lmin_fuite]; jp += depj[lmin_fuite];
-                echec[ip, jp] = k;
-                if (k % 1 == 0 || k == 64)
-                {
-                    echiquier[ip, jp].BackgroundImage = cavalier;
-                    await Task.Delay(0);
-                }
-            }
-        }
-
-        public Boolean coupPossible(int x, int y)
-        {
-            if (echec[x, y] != -1)
-            {
-                return true;
-            }
-            else return false;
-
-        }
-
-        public async void jouerModeJoueur(int ip, int jp)
-        {
-
-            if (coupPossible(ip, jp))
-            {
-                echiquier[ip, jp].BackgroundImage = cavalier;
-                echiquier[ip, jp].Enabled = false;
-                echiquier[ii, jj].Text = "X";
-            }
-            else jouerModeJoueur(ip, jp);
-
-            for (l = 0; l < 8; l++)
-            {
-                ii = ip + depi[l]; jj = jp + depj[l];
-            }
-            /*
-            for (coupPossible(ip,jp)
-            {
-                ii = ip + depi[l]; jj = jp + depj[l];
-                //if (coupPossible(ii, jj))
-                    echiquier[ii, jj].Text = "X";
-
-            }
-            */
-
-            //await Task.Delay(duree);
-            //while (cptTour < 64)
-            /*
-            {
-                //effacer la case précédente si il y en a 
-                echiquier[ip, jp].BackgroundImage = cavalier; //afficher le cavalier sur la case
-                cptTour++;
-                //incrémenter le compteur 
-            }
-            */
-            echiquier[ip, jp].BackgroundImage = cavalier;
-
-            for (k = 2; k <= 64; k++)
-            {
-
-                //echiquier[ip, jp].BackgroundImage = null;
-                //if (k == 2 || k % pas == 1 || k % pas == 0)
-                //    echiquier[ip, jp].Text = "" + (k - 1);
-
-
-            }
-            /*
-            //nb_fuite = ((echec[ii, jj] != 0) ? 10 : fuite(ii, jj));
-
-            if (nb_fuite < min_fuite)
-            {
-                min_fuite = nb_fuite; lmin_fuite = l;
-            }
-
-
-        //impasse
-        if (min_fuite == 9 & k != 64)
-        {
-            label1.Text = "Impasse !!";
-            break;
-        }
-        ip += depi[lmin_fuite]; jp += depj[lmin_fuite];
-        echec[ip, jp] = k;
-        if (k % pas == 0 || k == 64)
-        {
-            echiquier[ip, jp].BackgroundImage = cavalier;
-            await Task.Delay(duree);
-        }
-            */
-
-
-
         }
     }
 }
