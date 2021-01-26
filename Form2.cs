@@ -15,6 +15,7 @@ namespace Projet_Cavalier
         static int[,] echec = new int[12, 12];
         static int[] depi = new int[] { 2, 1, -1, -2, -2, -1, 1, 2 };
         static int[] depj = new int[] { 1, 2, 2, 1, -1, -2, -2, -1 };
+        //static int[,] memoriseCoup = new int[,];
 
         /* Définitions et déclarations */
         int nb_fuite, min_fuite, lmin_fuite = 0;
@@ -54,6 +55,7 @@ namespace Projet_Cavalier
             this.cptTour = 0;
             this.cavalier = Image.FromFile("img\\cavalier.jpg");
             this.echiquier = new Button[12, 12];
+            this.label1.Text = "Choisissez une case ou cliquez pour en générer une aléatoirement"; 
             //initialisation des cases d'échecs
             for (i = 0; i < 12; i++)
                 for (j = 0; j < 12; j++)
@@ -106,11 +108,15 @@ namespace Projet_Cavalier
 
             saisieI = trouverI(sender, echiquier);
             saisieJ = trouverJ(sender, echiquier);
-
+            this.label1.Text = "";
             if (coupPossible(trouverI(sender, echiquier), trouverJ(sender, echiquier)))
                 {
                 effacerEchiquier();
                 jouerModeJoueur(saisieI,saisieJ);
+            }
+            if (min_fuite == 9 & k != 64)
+            {
+                label1.Text = "Impasse !!";
             }
 
             //gardeI = trouverI(sender, echiquier);
@@ -136,11 +142,9 @@ namespace Projet_Cavalier
 
         public Boolean coupPossible(int x, int y)
         {
-            if (echec[x, y] != -1)
-            {
+            if (cptTour == 0)
                 return true;
-            }
-            if (cptTour > 1 && echiquier[saisieI, saisieJ].Text == "X")
+            else if (cptTour >= 1 && echiquier[saisieI, saisieJ].Text == "X")
                 return true;
             else return false;
 
@@ -153,7 +157,7 @@ namespace Projet_Cavalier
 
             for (k = 2; k <= 64; k++)
             {
-                // met en pause l'application
+                //met en pause l'application
                 while (pause)
                 {
                     Application.DoEvents();
