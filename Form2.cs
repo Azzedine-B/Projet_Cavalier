@@ -97,7 +97,8 @@ namespace Projet_Cavalier
 
             gardeI = iR;
             gardeJ = jR;
-            //jouer(iR, jR, 1000, 1);
+            jouerModeJoueur(iR, jR);
+            button1.Enabled = false;
         }
 
         private void Mon_Bouton_Click(object sender, EventArgs e)
@@ -106,7 +107,7 @@ namespace Projet_Cavalier
             saisieI = trouverI(sender, echiquier);
             saisieJ = trouverJ(sender, echiquier);
 
-            if (coupPossible(saisieI, saisieJ))
+            if (coupPossible(trouverI(sender, echiquier), trouverJ(sender, echiquier)))
                 {
                 effacerEchiquier();
                 jouerModeJoueur(saisieI,saisieJ);
@@ -122,8 +123,8 @@ namespace Projet_Cavalier
         public async void jouerModeJoueur(int ip, int jp)
         {
             cptTour++;
-            echiquier[saisieI, saisieJ].BackgroundImage = cavalier;
-            echiquier[saisieI, saisieJ].Enabled = false;
+            echiquier[ip, jp].BackgroundImage = cavalier;
+            echiquier[ip, jp].Enabled = false;
 
             for (l = 0; l < 8; l++)
             {
@@ -139,8 +140,8 @@ namespace Projet_Cavalier
             {
                 return true;
             }
-            else if (cptTour > 1 && echiquier[saisieI, saisieJ].Text != "X")
-                return false;
+            if (cptTour > 1 && echiquier[saisieI, saisieJ].Text == "X")
+                return true;
             else return false;
 
         }
