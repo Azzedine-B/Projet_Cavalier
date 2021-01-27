@@ -24,46 +24,31 @@ namespace Projet_Cavalier
         Image cavalier;
         static int[] dernierI = new int[64];
         static int[] dernierJ = new int[64];
-
-        /* VERSION QUI VEUT PAS MARCHER */
-        //static int[,] derniersCoups = new int[,];
-        //List<int> dernierI = new List<int>();
-        //List<int> dernierJ = new List<int>();
         bool pause = false;
         int gardeI = 0, gardeJ = 0;
         int cptTour;
+        int cptRetour;
 
         /* Initialisation */
         Form3 azzedine = new Form3();
 
-        /** Joue la simulation précédente 
-         * Efface l'échiquier
-         * Joue un jeu avec les données de la simulation précédente stockées dans gardeI, gardeJ
-         */
-        private void button2_Click(object sender, EventArgs e)
-        {
-            effacerEchiquier();
-            // on récupère les valeur de la simulation précédente
-            jouer(gardeI, gardeJ);
-        }
-
-        /** Initialise au load
+        /** 
+         * Load formulaire 2
          * Initialise l'échiquier comme un tableau 2D de boutons 12 * 12
-         * Fixe la taille des boutons 
-         * Mon_Bouton_Click = jouer en choisissant la case de départ
-         * Boucle pour rendre les boutons invisibles car hors tableau
-         * + Q : this controls.add
          */
         private void Form2_Load(object sender, EventArgs e)
         {
             this.cptTour = 0;
+            this.cptRetour = 5;
             this.cavalier = Image.FromFile("img\\cavalier.jpg");
             this.echiquier = new Button[12, 12];
             this.label1.Text = "Choisissez une case ou cliquez pour en générer une aléatoirement";
+
             //initialisation des cases d'échecs
             for (i = 0; i < 12; i++)
                 for (j = 0; j < 12; j++)
                     echec[i, j] = ((i < 2 | i > 9 | j < 2 | j > 9) ? -1 : 0);
+
             // initialisation des boutton de l'échiquier
             for (int l = 0; l < 12; l++)
             {
@@ -87,45 +72,9 @@ namespace Projet_Cavalier
             InitializeComponent();
         }
 
-        //bouton retour en arrière
-        private void button4_Click(object sender, EventArgs e)
-        {
-            int cptRetour = 5;
-            button4.Text = "Retour en arrière" + "(" + cptRetour + ")";
-
-            if (cptRetour > 0)
-            {
-                effacerEchiquier();
-                cptRetour--;
-                /* TODO : code a reprendre */
-                //echiquier[dernierI[cptTour], dernierJ[cptTour]].BackgroundImage = cavalier;
-                //echiquier[dernierI[cptTour], dernierJ[cptTour]].Enabled = false;
-                echiquier[dernierI[cptTour], dernierJ[cptTour]].BackgroundImage = cavalier;
-                echiquier[dernierI[cptTour], dernierJ[cptTour]].Enabled = true;
-
-
-                afficherAide(dernierI[cptTour], dernierJ[cptTour]);
-                cptTour--;
-                /*
-                for (l = 0; l < 8; l++)
-                {
-                    ii = dernierI[cptTour] + depi[l]; jj = dernierJ[cptTour] + depj[l];
-                    echiquier[ii, jj].Text = "X";
-                }
-                cptTour--;
-                */
-            }
-            else label1.Text = "Partie terminée"; //désactiver plateau et boutons
-        }
-
-
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            azzedine.Show();
-        }
-
-        //mode aléatoire
+        /* Bouton qui permet de sélectionner une case de départ pour l'utilisateur
+         * Place le cavalier et débute la partie à cet endroit
+         */
         private void button1_Click(object sender, EventArgs e)
         {
             effacerEchiquier();
@@ -133,16 +82,58 @@ namespace Projet_Cavalier
             int iR = random.Next(1, 8) + 1;
             int jR = random.Next(1, 8) + 1;
             // iR et jR evoluent de 2 à 9 !
-
             gardeI = iR;
             gardeJ = jR;
             jouerModeJoueur(iR, jR);
             button1.Enabled = false;
         }
 
+        /** Joue la simulation précédente 
+         * Efface l'échiquier
+         * Joue un jeu avec les données de la simulation précédente stockées dans gardeI, gardeJ
+         */
+        private void button2_Click(object sender, EventArgs e)
+        {
+            effacerEchiquier();
+            // on récupère les valeur de la simulation précédente
+            jouer(gardeI, gardeJ);
+        }
+
+        /* Bouton qui permet de revenir en arrière
+         * Décrémente le compteur de retour et le cptTour (pour savoir à quel indice du tableau dernierI/dernierJ on se trouve
+         * Désactive le bouton lorsque le joueur a utilisé toutes ses tentatives de retour
+         */
+        private void button4_Click(object sender, EventArgs e)
+        {
+            
+            button4.Text = "Retour en arrière" + "(" + cptRetour + ")";
+            if (cptRetour > 0)
+            {
+                effacerEchiquier();
+                cptRetour--;
+                echiquier[dernierI[cptTour], dernierJ[cptTour]].BackgroundImage = cavalier;
+                echiquier[dernierI[cptTour], dernierJ[cptTour]].Enabled = true;
+                afficherAide(dernierI[cptTour], dernierJ[cptTour]);
+                cptTour--;
+            }
+            else
+            {
+                label1.Text = "Plus de retours en arrière possibles"; 
+                button4.Enabled = false;
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            azzedine.Show();
+        }
+
+        /*
+         * Bouton qui permet les fonctions de jeu
+         * S'assure que la case est jouable par l'utilisateur         * 
+         */
         private void Mon_Bouton_Click(object sender, EventArgs e)
         {
-
             saisieI = trouverI(sender, echiquier);
             saisieJ = trouverJ(sender, echiquier);
             this.label1.Text = "";
@@ -155,21 +146,16 @@ namespace Projet_Cavalier
             {
                 label1.Text = "Impasse !!";
             }
-
-            //gardeI = trouverI(sender, echiquier);
-            //gardeJ = trouverJ(sender, echiquier);
-
         }
 
 
         /** Fonction de jeu
          * Passe l'image de la case sur cavalier et empêche de la jouer a nouveau
+         * Enregistre la case jouée dans les tableaux dernierI / dernierJ pour le retour en arrière
          */
         public async void jouerModeJoueur(int ip, int jp)
         {
             cptTour++;
-            //label2.Text = "" + cptTour + "dernierI =" + dernierI[cptTour];  
-            //label2.Text = "" + cptTour + "dernierI =" + dernierI.ElementAt[cptTour];
             echiquier[ip, jp].BackgroundImage = cavalier;
             echiquier[ip, jp].Enabled = false;
             dernierI[cptTour] = ip;
@@ -177,7 +163,7 @@ namespace Projet_Cavalier
             afficherAide(ip, jp);
         }
 
-
+        /* Booléen utilisé pour s'assurer que l'utilisateur choisit une case où il a le droit de jouer */
         public Boolean coupPossible(int x, int y)
         {
             if (cptTour == 0)
@@ -187,6 +173,8 @@ namespace Projet_Cavalier
             else return false;
 
         }
+
+        /* Lance le Jeu en mode ordinateur en partant de la première case jouée */
         public async void jouer(int ip, int jp)
         {
             echec[ip, jp] = 1;
@@ -230,7 +218,7 @@ namespace Projet_Cavalier
             }
         }
 
-        //affiche les "X" sur les cases jouables
+        /* affiche les "X" sur les cases jouables  */
         private void afficherAide(int x, int y)
         {
             for (l = 0; l < 8; l++)
@@ -239,7 +227,8 @@ namespace Projet_Cavalier
                 echiquier[ii, jj].Text = "X";
             }
         }
-        //effacer toutes les cases de l'échiquier
+
+        /* Efface toutes les cases de l'échiquier */
         public void effacerEchiquier()
         {
             for (int i = 2; i < 10; i++)
@@ -252,7 +241,7 @@ namespace Projet_Cavalier
             }
         }
 
-        // trouve la valeur de i dans un tableau 2d
+        /* Trouve la valeur de i dans un tableau 2d */
         static int trouverI(object o, Button[,] b)
         {
             for (int i = 2; i < 10; i++)
@@ -266,7 +255,7 @@ namespace Projet_Cavalier
             return 0;
         }
 
-        // trouve la valeur de j dans un tableau 2d
+        /* Trouve la valeur de j dans un tableau 2d */
         static int trouverJ(object o, Button[,] b)
         {
             for (int i = 2; i < 10; i++)
