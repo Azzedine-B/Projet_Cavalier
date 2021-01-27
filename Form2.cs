@@ -60,7 +60,11 @@ namespace Projet_Cavalier
                     b.Size = new Size(50, 50);
                     b.Click += new System.EventHandler(this.Mon_Bouton_Click);
                     if (c < 2 | c > 9 || l < 2 | l > 9)
+                    {
                         b.Visible = false;
+                        b.Enabled = false;
+                    }
+                        
                     this.echiquier[l, c] = b;
                     this.Controls.Add(b); // ??
                 }
@@ -109,12 +113,12 @@ namespace Projet_Cavalier
             button4.Text = "Retour en arrière" + "(" + cptRetour + ")";
             if (cptRetour > 0)
             {
-                effacerEchiquier();
+                cptTour--;
                 cptRetour--;
+                effacerEchiquier();
                 echiquier[dernierI[cptTour], dernierJ[cptTour]].BackgroundImage = cavalier;
                 echiquier[dernierI[cptTour], dernierJ[cptTour]].Enabled = true;
-                afficherAide(dernierI[cptTour], dernierJ[cptTour]);
-                cptTour--;
+                afficherFuite(dernierI[cptTour], dernierJ[cptTour]); 
             }
             else
             {
@@ -132,28 +136,37 @@ namespace Projet_Cavalier
          * Bouton qui permet les fonctions de jeu
          * S'assure que la case est jouable par l'utilisateur         * 
          */
+
         private void Mon_Bouton_Click(object sender, EventArgs e)
         {
+            // recodage de la méthode clique pour qu'elle réagisse a tout type d'erreur
+            label1.Text = "";
             saisieI = trouverI(sender, echiquier);
             saisieJ = trouverJ(sender, echiquier);
-            this.label1.Text = "";
-            if (coupPossible(trouverI(sender, echiquier), trouverJ(sender, echiquier)))
-                {
-                effacerEchiquier();
-                jouerModeJoueur(saisieI,saisieJ);
-            }
-            if (min_fuite == 9 & k != 64)
+            if (!impasse(saisieI, saisieJ) && !echiquierParcouru())
             {
-                label1.Text = "Impasse !!";
+                if (cptTour == 0 || echiquier[saisieI, saisieJ].Text == "X")
+                {
+                    jouerModeJoueur(saisieI, saisieJ);
+                }
+                else
+                    label1.Text = "Le cavalier ne peux pas se déplacer sur cette case ! ";
+            }
+            else if (echiquierParcouru())
+            {
+                label1.Text = "Vous avez gagné cavalier ! ";
+            }
+            else
+            {
+                effacerEchiquier();
+                echiquier[saisieI, saisieJ].BackgroundImage = cavalier;
+                desactiverEchiquier();
+                label1.Text = "Cavalier dans une impasse !";
             }
         }
 
-
-        /** Fonction de jeu
-         * Passe l'image de la case sur cavalier et empêche de la jouer a nouveau
-         * Enregistre la case jouée dans les tableaux dernierI / dernierJ pour le retour en arrière
-         */
-        public async void jouerModeJoueur(int ip, int jp)
+        /*
+        public void jouerModeJoueur(int ip, int jp)
         {
             cptTour++;
             echiquier[ip, jp].BackgroundImage = cavalier;
@@ -161,9 +174,58 @@ namespace Projet_Cavalier
             dernierI[cptTour] = ip;
             dernierJ[cptTour] = jp;
             afficherAide(ip, jp);
+        }*/
+
+
+
+
+        /** Fonction de jeu
+         * Passe l'image de la case sur cavalier et empêche de la jouer a nouveau
+         * Enregistre la case jouée dans les tableaux dernierI / dernierJ pour le retour en arrière
+         */
+        public void jouerModeJoueur(int ip, int jp)
+        {
+            effacerEchiquier();
+            echiquier[saisieI, saisieJ].BackgroundImage = cavalier;
+            echiquier[saisieI, saisieJ].Enabled = false;
+            afficherFuite(saisieI, saisieJ);
+            ++cptTour;
+            dernierI[cptTour] = saisieI;
+            dernierJ[cptTour] = saisieJ;
+            label1.Text = "" + impasse(saisieI, saisieJ);
         }
 
+        /*
+         * Vérifie si le cavalier est dans une impasse 
+         */
+        public bool impasse(int x, int y)
+        {
+            int n, l;
+
+            for (l = 0, n = 8; l < 8; l++)
+                if (!echiquier[x + depi[l], y + depj[l]].Enabled)
+                    --n;
+
+            return n == 0;
+        }
+
+        /*
+         * affiche les fuites possible pour notre brave cavalier
+         */
+        public void afficherFuite(int x, int y)
+        {
+            for (l = 0; l < 8; l++)
+            {
+                ii = x + depi[l]; jj = y + depj[l];
+
+                if (echiquier[ii, jj].Enabled)
+                    echiquier[ii, jj].Text = "X";
+            }
+        }
+
+        /* il s'agit de ta méthode que j'ai mit en commentaire
         /* Booléen utilisé pour s'assurer que l'utilisateur choisit une case où il a le droit de jouer */
+        /*
         public Boolean coupPossible(int x, int y)
         {
             if (cptTour == 0)
@@ -172,6 +234,42 @@ namespace Projet_Cavalier
                 return true;
             else return false;
 
+        }
+        */
+
+        /*
+         * Désactive toutes les cases de l'échiquier 
+         */
+        public void desactiverEchiquier()
+        {
+            for (int i = 2; i < 10; i++)
+
+            {
+                for (int j = 2; j < 10; j++)
+                {
+                    echiquier[i, j].Enabled = false;
+                }
+
+            }
+        }
+
+        /*
+         * L'échiquier est-il totalement parcouru? si oui on l'utilise pour annoncer la victoire au joueur
+         */
+        public Boolean echiquierParcouru()
+        {
+            int cpt = 0;
+            for (int i = 2; i < 10; i++)
+
+            {
+                for (int j = 2; j < 10; j++)
+                {
+                    if (!echiquier[i, j].Enabled)
+                        ++cpt;
+                }
+
+            }
+            return cpt == 63;
         }
 
         /* Lance le Jeu en mode ordinateur en partant de la première case jouée */
@@ -218,7 +316,10 @@ namespace Projet_Cavalier
             }
         }
 
+        /*
+         * Cette méthode est la même que afficher fuite, du coup je l'ai mis en commentaire aussi
         /* affiche les "X" sur les cases jouables  */
+        /*
         private void afficherAide(int x, int y)
         {
             for (l = 0; l < 8; l++)
@@ -227,6 +328,7 @@ namespace Projet_Cavalier
                 echiquier[ii, jj].Text = "X";
             }
         }
+        */
 
         /* Efface toutes les cases de l'échiquier */
         public void effacerEchiquier()
