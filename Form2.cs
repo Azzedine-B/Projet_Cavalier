@@ -15,22 +15,26 @@ namespace Projet_Cavalier
         static int[,] echec = new int[12, 12];
         static int[] depi = new int[] { 2, 1, -1, -2, -2, -1, 1, 2 };
         static int[] depj = new int[] { 1, 2, 2, 1, -1, -2, -2, -1 };
-        //static int[,] memoriseCoup = new int[,];
+        
 
         /* Définitions et déclarations */
         int nb_fuite, min_fuite, lmin_fuite = 0;
         int i, j, k, l, ii, jj, saisieI, saisieJ;
         Button[,] echiquier;
         Image cavalier;
+        static int[] dernierI = new int[64];
+        static int[] dernierJ = new int[64];
+
+        /* VERSION QUI VEUT PAS MARCHER */
+        //static int[,] derniersCoups = new int[,];
+        //List<int> dernierI = new List<int>();
+        //List<int> dernierJ = new List<int>();
         bool pause = false;
         int gardeI = 0, gardeJ = 0;
         int cptTour;
 
         /* Initialisation */
         Form3 azzedine = new Form3();
-        int[,] derniersCoups = new int[2, 5];
-
-
 
         /** Joue la simulation précédente 
          * Efface l'échiquier
@@ -55,7 +59,7 @@ namespace Projet_Cavalier
             this.cptTour = 0;
             this.cavalier = Image.FromFile("img\\cavalier.jpg");
             this.echiquier = new Button[12, 12];
-            this.label1.Text = "Choisissez une case ou cliquez pour en générer une aléatoirement"; 
+            this.label1.Text = "Choisissez une case ou cliquez pour en générer une aléatoirement";
             //initialisation des cases d'échecs
             for (i = 0; i < 12; i++)
                 for (j = 0; j < 12; j++)
@@ -82,6 +86,39 @@ namespace Projet_Cavalier
         {
             InitializeComponent();
         }
+
+        //bouton retour en arrière
+        private void button4_Click(object sender, EventArgs e)
+        {
+            int cptRetour = 5;
+            button4.Text = "Retour en arrière" + "(" + cptRetour + ")";
+
+            if (cptRetour > 0)
+            {
+                effacerEchiquier();
+                cptRetour--;
+                /* TODO : code a reprendre */
+                //echiquier[dernierI[cptTour], dernierJ[cptTour]].BackgroundImage = cavalier;
+                //echiquier[dernierI[cptTour], dernierJ[cptTour]].Enabled = false;
+                echiquier[dernierI[cptTour], dernierJ[cptTour]].BackgroundImage = cavalier;
+                echiquier[dernierI[cptTour], dernierJ[cptTour]].Enabled = true;
+
+
+                afficherAide(dernierI[cptTour], dernierJ[cptTour]);
+                cptTour--;
+                /*
+                for (l = 0; l < 8; l++)
+                {
+                    ii = dernierI[cptTour] + depi[l]; jj = dernierJ[cptTour] + depj[l];
+                    echiquier[ii, jj].Text = "X";
+                }
+                cptTour--;
+                */
+            }
+            else label1.Text = "Partie terminée"; //désactiver plateau et boutons
+        }
+
+
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -121,7 +158,9 @@ namespace Projet_Cavalier
 
             //gardeI = trouverI(sender, echiquier);
             //gardeJ = trouverJ(sender, echiquier);
+
         }
+
 
         /** Fonction de jeu
          * Passe l'image de la case sur cavalier et empêche de la jouer a nouveau
@@ -129,14 +168,13 @@ namespace Projet_Cavalier
         public async void jouerModeJoueur(int ip, int jp)
         {
             cptTour++;
+            //label2.Text = "" + cptTour + "dernierI =" + dernierI[cptTour];  
+            //label2.Text = "" + cptTour + "dernierI =" + dernierI.ElementAt[cptTour];
             echiquier[ip, jp].BackgroundImage = cavalier;
             echiquier[ip, jp].Enabled = false;
-
-            for (l = 0; l < 8; l++)
-            {
-                ii = ip + depi[l]; jj = jp + depj[l];
-                echiquier[ii, jj].Text = "X";
-            }
+            dernierI[cptTour] = ip;
+            dernierJ[cptTour] = jp;
+            afficherAide(ip, jp);
         }
 
 
@@ -192,6 +230,15 @@ namespace Projet_Cavalier
             }
         }
 
+        //affiche les "X" sur les cases jouables
+        private void afficherAide(int x, int y)
+        {
+            for (l = 0; l < 8; l++)
+            {
+                ii = x + depi[l]; jj = y + depj[l];
+                echiquier[ii, jj].Text = "X";
+            }
+        }
         //effacer toutes les cases de l'échiquier
         public void effacerEchiquier()
         {
