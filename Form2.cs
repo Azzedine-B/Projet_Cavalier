@@ -26,7 +26,6 @@ namespace Projet_Cavalier
         static int[] dernierJ = new int[64];
         bool pause = false;
         int gardeI = 0, gardeJ = 0;
-        //int premierI = 0, premierJ = 0;
         int cptTour;
         int cptRetour;
 
@@ -79,6 +78,7 @@ namespace Projet_Cavalier
 
         /* Bouton qui permet de sélectionner une case de départ pour l'utilisateur
          * Place le cavalier et débute la partie à cet endroit
+         * Stock les coordonnées de la première case jouée pour la fonction abandon & simulation
          */
         private void button1_Click(object sender, EventArgs e)
         {
@@ -87,14 +87,15 @@ namespace Projet_Cavalier
             int iR = random.Next(1, 8) + 1;
             int jR = random.Next(1, 8) + 1;
             // iR et jR evoluent de 2 à 9 !
+            //lance la simulation à la case générée.
+            jouerModeJoueur(iR, jR);
+            button2.Enabled = true;
             gardeI = iR;
             gardeJ = jR;
-            jouerModeJoueur(iR, jR);
-            button1.Enabled = false;
-            button2.Enabled = true;
         }
 
-        /** Joue la simulation précédente 
+        /** 
+         * Bouton qui permet d'abandonner la partie et de jouer la simulation depuis la première case jouée
          * Efface l'échiquier
          * Joue un jeu avec les données de la simulation précédente stockées dans gardeI, gardeJ
          */
@@ -136,13 +137,14 @@ namespace Projet_Cavalier
         }
 
         /*
-         * Bouton qui permet les fonctions de jeu
+         * Bouton (click) qui permet les fonctions de jeu
          * S'assure que la case est jouable par l'utilisateur         
          */
         private void Mon_Bouton_Click(object sender, EventArgs e)
         {
             // recodage de la méthode clique pour qu'elle réagisse a tout type d'erreur
             label1.Text = "";
+            button1.Enabled = false;
             button2.Enabled = true;
             saisieI = trouverI(sender, echiquier);
             saisieJ = trouverJ(sender, echiquier);
@@ -151,6 +153,8 @@ namespace Projet_Cavalier
                 if (cptTour == 0 || echiquier[saisieI, saisieJ].Text == "X")
                 {
                     jouerModeJoueur(saisieI, saisieJ);
+                    gardeI = saisieI;
+                    gardeJ = saisieJ;
                 }
                 else
                     label1.Text = "Le cavalier ne peut pas se déplacer sur cette case ! ";
@@ -189,13 +193,12 @@ namespace Projet_Cavalier
         public void jouerModeJoueur(int ip, int jp)
         {
             effacerEchiquier();
-            echiquier[saisieI, saisieJ].BackgroundImage = cavalier;
-            echiquier[saisieI, saisieJ].Enabled = false;
-            afficherFuite(saisieI, saisieJ);
+            echiquier[ip,jp].BackgroundImage = cavalier;
+            echiquier[ip,jp].Enabled = false;
+            afficherFuite(ip, jp);
             ++cptTour;
             dernierI[cptTour] = saisieI;
             dernierJ[cptTour] = saisieJ;
-            //label1.Text = "" + impasse(saisieI, saisieJ);
         }
 
         /*
@@ -220,11 +223,37 @@ namespace Projet_Cavalier
             for (l = 0; l < 8; l++)
             {
                 ii = x + depi[l]; jj = y + depj[l];
-
                 if (echiquier[ii, jj].Enabled)
                     echiquier[ii, jj].Text = "X";
             }
+
+
+
+            /* version Azzedine hors index 
+            {
+            for (l = 0; l < 8; l++)
+                ii = x + depi[l]; jj = y + depj[l];
+
+                if (echiquier[ii, jj].Enabled)
+                    echiquier[ii, jj].Text = "X";
+
+            }
+            */
         }
+
+        /*
+         * Cette méthode est la même que afficher fuite, du coup je l'ai mis en commentaire aussi
+        /* affiche les "X" sur les cases jouables  */
+        /*
+        private void afficherAide(int x, int y)
+        {
+            for (l = 0; l < 8; l++)
+            {
+                ii = x + depi[l]; jj = y + depj[l];
+                echiquier[ii, jj].Text = "X";
+            }
+        }
+*/
 
         /* il s'agit de ta méthode que j'ai mit en commentaire
         /* Booléen utilisé pour s'assurer que l'utilisateur choisit une case où il a le droit de jouer */
@@ -319,19 +348,6 @@ namespace Projet_Cavalier
             }
         }
 
-        /*
-         * Cette méthode est la même que afficher fuite, du coup je l'ai mis en commentaire aussi
-        /* affiche les "X" sur les cases jouables  */
-        /*
-        private void afficherAide(int x, int y)
-        {
-            for (l = 0; l < 8; l++)
-            {
-                ii = x + depi[l]; jj = y + depj[l];
-                echiquier[ii, jj].Text = "X";
-            }
-        }
-        */
 
         /* Efface toutes les cases de l'échiquier */
         public void effacerEchiquier()
