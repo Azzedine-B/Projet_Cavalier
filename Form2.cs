@@ -78,6 +78,7 @@ namespace Projet_Cavalier
         }
 
         /* Bouton qui permet de sélectionner une case de départ pour l'utilisateur
+         * Génére deux chiffres aléatoires
          * Place le cavalier et débute la partie à cet endroit
          * Stock les coordonnées de la première case jouée pour la fonction abandon & simulation
          */
@@ -91,8 +92,11 @@ namespace Projet_Cavalier
             //lance la simulation à la case générée.
             jouerModeJoueur(iR, jR);
             button2.Enabled = true;
-            gardeI = iR;
-            gardeJ = jR;
+            this.gardeI = iR;
+            this.gardeJ = jR;
+
+            //controle a supprimer
+            label2.Text = ("" + gardeI + " " + gardeJ + "");
         }
 
         /** 
@@ -103,9 +107,12 @@ namespace Projet_Cavalier
         private void button2_Click(object sender, EventArgs e)
         {
             effacerEchiquier();
-            // on récupère les valeur de la simulation précédente
-            jouer(gardeI, gardeJ);
+            activerEchiquier();
+            jouer(gardeI, gardeJ, 1000, 1);
             button4.Enabled = false;
+
+            //controle a supprimer
+            label2.Text = ("" + gardeI + " " + gardeJ + "");
         }
 
         /* Bouton qui permet de revenir en arrière
@@ -113,8 +120,7 @@ namespace Projet_Cavalier
          * Désactive le bouton lorsque le joueur a utilisé toutes ses tentatives de retour
          */
         private void button4_Click(object sender, EventArgs e)
-        {
-            
+        {            
             button4.Text = "Retour en arrière" + "(" + cptRetour + ")";
             if (cptRetour > 0)
             {
@@ -130,6 +136,9 @@ namespace Projet_Cavalier
                 label1.Text = "Plus de retours en arrière possibles"; 
                 button4.Enabled = false;
             }
+
+            //controle a supprimer
+            label2.Text = ("" + gardeI + " " + gardeJ + "");
         }
 
         /*
@@ -154,8 +163,8 @@ namespace Projet_Cavalier
                 if (cptTour == 0 || echiquier[saisieI, saisieJ].Text == "X")
                 {
                     jouerModeJoueur(saisieI, saisieJ);
-                    gardeI = saisieI;
-                    gardeJ = saisieJ;
+                    //gardeI = saisieI;
+                    //gardeJ = saisieJ;
                 }
                 else
                     label1.Text = "Le cavalier ne peut pas se déplacer sur cette case ! ";
@@ -171,6 +180,15 @@ namespace Projet_Cavalier
                 desactiverEchiquier();
                 label1.Text = "Cavalier dans une impasse !";
             }
+
+            if (cptTour == 1)
+            {
+                this.gardeI = saisieI;
+                this.gardeJ = saisieJ;
+            }
+
+            //controle a supprimer
+            label2.Text = ("" + gardeI + " " + gardeJ + "");
         }
 
         /** Fonction de jeu
@@ -189,6 +207,37 @@ namespace Projet_Cavalier
             dernierJ[cptTour] = saisieJ;
         }
 
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string about = "Jeu du cavalier développé par Azzedine et Yan dans le cadre de notre DUT informatique AS à l'Université Paris-Descartes";
+            MessageBox.Show(about);
+        }
+
+        private void règlesDuJeuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string regles = "Le but de cette application graphique WinForms (C#), est de faire parcourir à un cavalier l'ensemble d'un échiquier sans passer deux fois sur la même case. On rappelle la technique de déplacement d'un cavalier sur un échiquier : à partir d'une case, le cavalier ne peut se déplacer que sur l'une des cases avec un X";
+            MessageBox.Show(regles);
+        }
+
+        private void noirBlancToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for (int i = 2; i < 10; i++)
+            {
+                for (int j = 2; j < 10; j++)
+                {
+                    if ((j % 2 == 0 && (i + 1) % 2 == 0) || (j % 2 != 0 && i % 2 == 0))
+                    {
+                        echiquier[i, j].BackColor = Color.White;
+                    }
+                    else echiquier[i, j].BackColor = Color.FromArgb(133, 144, 161);
+                }
+            }
+        }
+
+        //((j + 1 % 2 == 0 && i % 2 == 0)))
+
+
+
         /*
          * Vérifie si le cavalier est dans une impasse 
          */
@@ -199,7 +248,6 @@ namespace Projet_Cavalier
             for (l = 0, n = 8; l < 8; l++)
                 if (!echiquier[x + depi[l], y + depj[l]].Enabled)
                     --n;
-
             return n == 0;
         }
 
@@ -232,8 +280,21 @@ namespace Projet_Cavalier
             }
         }
 
+        public void activerEchiquier()
+        {
+            for (int i = 2; i < 10; i++)
+
+            {
+                for (int j = 2; j < 10; j++)
+                {
+                    echiquier[i, j].Enabled = true;
+                }
+
+            }
+        }
+
         /*
-         * L'échiquier est-il totalement parcouru? si oui on l'utilise pour annoncer la victoire au joueur
+         * L'échiquier est-il totalement parcouru? Si oui on l'utilise pour annoncer la victoire au joueur
          */
         public Boolean echiquierParcouru()
         {
@@ -252,22 +313,26 @@ namespace Projet_Cavalier
         }
 
         /* Lance le Jeu en mode ordinateur en partant de la première case jouée */
-        public async void jouer(int ip, int jp)
+        public async void jouer(int ip, int jp, int duree, int pas)
         {
+            for (i = 0; i < 12; i++)
+                for (j = 0; j < 12; j++)
+                    echec[i, j] = ((i < 2 | i > 9 | j < 2 | j > 9) ? -1 : 0);
+
             echec[ip, jp] = 1;
             echiquier[ip, jp].BackgroundImage = cavalier;
-
+            await Task.Delay(duree);
 
             for (k = 2; k <= 64; k++)
             {
-                //met en pause l'application
+                // met en pause l'application
                 while (pause)
                 {
                     Application.DoEvents();
                 }
 
                 echiquier[ip, jp].BackgroundImage = null;
-                if (k == 2 || k % 1 == 1 || k % 1 == 0)
+                if (k == 2 || k % pas == 1 || k % pas == 0)
                     echiquier[ip, jp].Text = "" + (k - 1);
                 for (l = 0, min_fuite = 11; l < 8; l++)
                 {
@@ -282,19 +347,17 @@ namespace Projet_Cavalier
                 }
                 if (min_fuite == 9 & k != 64)
                 {
-                    label1.Text = "Impasse !!";
                     break;
                 }
                 ip += depi[lmin_fuite]; jp += depj[lmin_fuite];
                 echec[ip, jp] = k;
-                if (k % 1 == 0 || k == 64)
+                if (k % pas == 0 || k == 64)
                 {
                     echiquier[ip, jp].BackgroundImage = cavalier;
-                    await Task.Delay(0);
+                    await Task.Delay(duree);
                 }
             }
         }
-
 
         /* Efface toutes les cases de l'échiquier */
         public void effacerEchiquier()
