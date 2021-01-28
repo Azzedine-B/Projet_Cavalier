@@ -20,6 +20,8 @@ namespace Projet_Cavalier
         private void Form4_Load(object sender, EventArgs e)
         {
             //form4.Text = "Menu principal";
+            /* Initialisation */
+            Form3 azzedine = new Form3();
         }
 
         private void button1_Click(object sender, EventArgs e)

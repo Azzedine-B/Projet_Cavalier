@@ -29,9 +29,6 @@ namespace Projet_Cavalier
         int cptTour;
         int cptRetour;
 
-        /* Initialisation */
-        Form3 azzedine = new Form3();
-
         /** 
          * Load formulaire 2
          * Initialise l'échiquier comme un tableau 2D de boutons 12 * 12
@@ -67,7 +64,7 @@ namespace Projet_Cavalier
                     }
                         
                     this.echiquier[l, c] = b;
-                    this.Controls.Add(b); // ??
+                    this.Controls.Add(b);
                 }
             }
         }
@@ -94,9 +91,6 @@ namespace Projet_Cavalier
             button2.Enabled = true;
             this.gardeI = iR;
             this.gardeJ = jR;
-
-            //controle a supprimer
-            label2.Text = ("" + gardeI + " " + gardeJ + "");
         }
 
         /** 
@@ -110,9 +104,6 @@ namespace Projet_Cavalier
             activerEchiquier();
             jouer(gardeI, gardeJ, 1000, 1);
             button4.Enabled = false;
-
-            //controle a supprimer
-            label2.Text = ("" + gardeI + " " + gardeJ + "");
         }
 
         /* Bouton qui permet de revenir en arrière
@@ -136,15 +127,6 @@ namespace Projet_Cavalier
                 label1.Text = "Plus de retours en arrière possibles"; 
                 button4.Enabled = false;
             }
-
-            //controle a supprimer
-            label2.Text = ("" + gardeI + " " + gardeJ + "");
-        }
-
-        /*
-        private void button3_Click(object sender, EventArgs e)
-        {
-            azzedine.Show();
         }
 
         /*
@@ -163,15 +145,13 @@ namespace Projet_Cavalier
                 if (cptTour == 0 || echiquier[saisieI, saisieJ].Text == "X")
                 {
                     jouerModeJoueur(saisieI, saisieJ);
-                    //gardeI = saisieI;
-                    //gardeJ = saisieJ;
                 }
                 else
                     label1.Text = "Le cavalier ne peut pas se déplacer sur cette case ! ";
             }
             else if (echiquierParcouru())
             {
-                label1.Text = "Vous avez gagné cavalier ! ";
+                label1.Text = "Vous avez gagné cavalier !";
             }
             else
             {
@@ -186,9 +166,6 @@ namespace Projet_Cavalier
                 this.gardeI = saisieI;
                 this.gardeJ = saisieJ;
             }
-
-            //controle a supprimer
-            label2.Text = ("" + gardeI + " " + gardeJ + "");
         }
 
         /** Fonction de jeu
@@ -263,10 +240,6 @@ namespace Projet_Cavalier
                 }
             }
         }
-
-        //((j + 1 % 2 == 0 && i % 2 == 0)))
-
-
 
         /*
          * Vérifie si le cavalier est dans une impasse 
