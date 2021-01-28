@@ -40,6 +40,8 @@
             this.paramètreDuJeuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.couleurDuDamierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.noirBlancToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.jauneEtChocolatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bleuEtRougeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -136,7 +138,9 @@
             // couleurDuDamierToolStripMenuItem
             // 
             this.couleurDuDamierToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.noirBlancToolStripMenuItem});
+            this.noirBlancToolStripMenuItem,
+            this.jauneEtChocolatToolStripMenuItem,
+            this.bleuEtRougeToolStripMenuItem});
             this.couleurDuDamierToolStripMenuItem.Name = "couleurDuDamierToolStripMenuItem";
             this.couleurDuDamierToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.couleurDuDamierToolStripMenuItem.Text = "Couleur du damier";
@@ -147,6 +151,20 @@
             this.noirBlancToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.noirBlancToolStripMenuItem.Text = "Noir et blanc";
             this.noirBlancToolStripMenuItem.Click += new System.EventHandler(this.noirBlancToolStripMenuItem_Click);
+            // 
+            // jauneEtChocolatToolStripMenuItem
+            // 
+            this.jauneEtChocolatToolStripMenuItem.Name = "jauneEtChocolatToolStripMenuItem";
+            this.jauneEtChocolatToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.jauneEtChocolatToolStripMenuItem.Text = "Jaune et chocolat";
+            this.jauneEtChocolatToolStripMenuItem.Click += new System.EventHandler(this.jauneEtChocolatToolStripMenuItem_Click);
+            // 
+            // bleuEtRougeToolStripMenuItem
+            // 
+            this.bleuEtRougeToolStripMenuItem.Name = "bleuEtRougeToolStripMenuItem";
+            this.bleuEtRougeToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.bleuEtRougeToolStripMenuItem.Text = "Bleu et rouge";
+            this.bleuEtRougeToolStripMenuItem.Click += new System.EventHandler(this.bleuEtRougeToolStripMenuItem_Click);
             // 
             // Form2
             // 
@@ -183,5 +201,7 @@
         private System.Windows.Forms.ToolStripMenuItem paramètreDuJeuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem couleurDuDamierToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem noirBlancToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem jauneEtChocolatToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bleuEtRougeToolStripMenuItem;
     }
 }

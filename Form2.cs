@@ -234,6 +234,36 @@ namespace Projet_Cavalier
             }
         }
 
+        private void jauneEtChocolatToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for (int i = 2; i < 10; i++)
+            {
+                for (int j = 2; j < 10; j++)
+                {
+                    if ((j % 2 == 0 && (i + 1) % 2 == 0) || (j % 2 != 0 && i % 2 == 0))
+                    {
+                        echiquier[i, j].BackColor = Color.FromArgb(255, 222, 51);
+                    }
+                    else echiquier[i, j].BackColor = Color.FromArgb(124, 43, 4);
+                }
+            }
+        }
+
+        private void bleuEtRougeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for (int i = 2; i < 10; i++)
+            {
+                for (int j = 2; j < 10; j++)
+                {
+                    if ((j % 2 == 0 && (i + 1) % 2 == 0) || (j % 2 != 0 && i % 2 == 0))
+                    {
+                        echiquier[i, j].BackColor = Color.FromArgb(51, 180, 255);
+                    }
+                    else echiquier[i, j].BackColor = Color.FromArgb(255, 105, 51);
+                }
+            }
+        }
+
         //((j + 1 % 2 == 0 && i % 2 == 0)))
 
 
