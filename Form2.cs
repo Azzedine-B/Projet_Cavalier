@@ -44,6 +44,7 @@ namespace Projet_Cavalier
             this.echiquier = new Button[12, 12];
             this.label1.Text = "Choisissez une case ou cliquez pour en générer une aléatoirement";
             this.button2.Enabled = false;
+            this.button4.Enabled = false;
             //initialisation des cases d'échecs
             for (i = 0; i < 12; i++)
                 for (j = 0; j < 12; j++)
@@ -193,6 +194,7 @@ namespace Projet_Cavalier
         public void jouerModeJoueur(int ip, int jp)
         {
             effacerEchiquier();
+            button4.Enabled = true;
             echiquier[ip,jp].BackgroundImage = cavalier;
             echiquier[ip,jp].Enabled = false;
             afficherFuite(ip, jp);
@@ -221,53 +223,12 @@ namespace Projet_Cavalier
         public void afficherFuite(int x, int y)
         {
             for (l = 0; l < 8; l++)
-            {
+            {      
                 ii = x + depi[l]; jj = y + depj[l];
                 if (echiquier[ii, jj].Enabled)
                     echiquier[ii, jj].Text = "X";
             }
-
-
-
-            /* version Azzedine hors index 
-            {
-            for (l = 0; l < 8; l++)
-                ii = x + depi[l]; jj = y + depj[l];
-
-                if (echiquier[ii, jj].Enabled)
-                    echiquier[ii, jj].Text = "X";
-
-            }
-            */
         }
-
-        /*
-         * Cette méthode est la même que afficher fuite, du coup je l'ai mis en commentaire aussi
-        /* affiche les "X" sur les cases jouables  */
-        /*
-        private void afficherAide(int x, int y)
-        {
-            for (l = 0; l < 8; l++)
-            {
-                ii = x + depi[l]; jj = y + depj[l];
-                echiquier[ii, jj].Text = "X";
-            }
-        }
-*/
-
-        /* il s'agit de ta méthode que j'ai mit en commentaire
-        /* Booléen utilisé pour s'assurer que l'utilisateur choisit une case où il a le droit de jouer */
-        /*
-        public Boolean coupPossible(int x, int y)
-        {
-            if (cptTour == 0)
-                return true;
-            else if (cptTour >= 1 && echiquier[saisieI, saisieJ].Text == "X")
-                return true;
-            else return false;
-
-        }
-        */
 
         /*
          * Désactive toutes les cases de l'échiquier 
