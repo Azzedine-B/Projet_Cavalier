@@ -132,7 +132,6 @@ namespace Projet_Cavalier
         {
             azzedine.Show();
         }
-        */
 
         /*
          * Bouton qui permet les fonctions de jeu
