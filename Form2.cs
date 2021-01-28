@@ -26,6 +26,7 @@ namespace Projet_Cavalier
         static int[] dernierJ = new int[64];
         bool pause = false;
         int gardeI = 0, gardeJ = 0;
+        //int premierI = 0, premierJ = 0;
         int cptTour;
         int cptRetour;
 
@@ -43,7 +44,7 @@ namespace Projet_Cavalier
             this.cavalier = Image.FromFile("img\\cavalier.jpg");
             this.echiquier = new Button[12, 12];
             this.label1.Text = "Choisissez une case ou cliquez pour en générer une aléatoirement";
-
+            this.button2.Enabled = false;
             //initialisation des cases d'échecs
             for (i = 0; i < 12; i++)
                 for (j = 0; j < 12; j++)
@@ -90,6 +91,7 @@ namespace Projet_Cavalier
             gardeJ = jR;
             jouerModeJoueur(iR, jR);
             button1.Enabled = false;
+            button2.Enabled = true;
         }
 
         /** Joue la simulation précédente 
@@ -135,13 +137,13 @@ namespace Projet_Cavalier
 
         /*
          * Bouton qui permet les fonctions de jeu
-         * S'assure que la case est jouable par l'utilisateur         * 
+         * S'assure que la case est jouable par l'utilisateur         
          */
-
         private void Mon_Bouton_Click(object sender, EventArgs e)
         {
             // recodage de la méthode clique pour qu'elle réagisse a tout type d'erreur
             label1.Text = "";
+            button2.Enabled = true;
             saisieI = trouverI(sender, echiquier);
             saisieJ = trouverJ(sender, echiquier);
             if (!impasse(saisieI, saisieJ) && !echiquierParcouru())
@@ -151,7 +153,7 @@ namespace Projet_Cavalier
                     jouerModeJoueur(saisieI, saisieJ);
                 }
                 else
-                    label1.Text = "Le cavalier ne peux pas se déplacer sur cette case ! ";
+                    label1.Text = "Le cavalier ne peut pas se déplacer sur cette case ! ";
             }
             else if (echiquierParcouru())
             {
