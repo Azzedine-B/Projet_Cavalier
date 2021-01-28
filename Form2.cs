@@ -127,10 +127,12 @@ namespace Projet_Cavalier
             }
         }
 
+        /*
         private void button3_Click(object sender, EventArgs e)
         {
             azzedine.Show();
         }
+        */
 
         /*
          * Bouton qui permet les fonctions de jeu
@@ -192,7 +194,7 @@ namespace Projet_Cavalier
             ++cptTour;
             dernierI[cptTour] = saisieI;
             dernierJ[cptTour] = saisieJ;
-            label1.Text = "" + impasse(saisieI, saisieJ);
+            //label1.Text = "" + impasse(saisieI, saisieJ);
         }
 
         /*
