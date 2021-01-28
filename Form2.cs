@@ -96,15 +96,16 @@ namespace Projet_Cavalier
         }
 
         /** 
-         * Bouton qui permet d'abandonner la partie et de jouer la simulation depuis la première case jouée
-         * Efface l'échiquier
-         * Joue un jeu avec les données de la simulation précédente stockées dans gardeI, gardeJ
+         * Bouton qui permet d'abandonner la partie et de jouer la simulation du départ
+         * Efface l'échiquier et réactive l'ensemble des cases
+         * Récupère les données du 1er coup jouer et lance le jeu en mode simulation
          */
         private void button2_Click(object sender, EventArgs e)
         {
             effacerEchiquier();
             // on récupère les valeur de la simulation précédente
             jouer(gardeI, gardeJ);
+            button4.Enabled = false;
         }
 
         /* Bouton qui permet de revenir en arrière
@@ -143,7 +144,6 @@ namespace Projet_Cavalier
          */
         private void Mon_Bouton_Click(object sender, EventArgs e)
         {
-            // recodage de la méthode clique pour qu'elle réagisse a tout type d'erreur
             label1.Text = "";
             button1.Enabled = false;
             button2.Enabled = true;
@@ -172,20 +172,6 @@ namespace Projet_Cavalier
                 label1.Text = "Cavalier dans une impasse !";
             }
         }
-
-        /*
-        public void jouerModeJoueur(int ip, int jp)
-        {
-            cptTour++;
-            echiquier[ip, jp].BackgroundImage = cavalier;
-            echiquier[ip, jp].Enabled = false;
-            dernierI[cptTour] = ip;
-            dernierJ[cptTour] = jp;
-            afficherAide(ip, jp);
-        }*/
-
-
-
 
         /** Fonction de jeu
          * Passe l'image de la case sur cavalier et empêche de la jouer a nouveau
