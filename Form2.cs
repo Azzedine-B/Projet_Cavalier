@@ -156,9 +156,10 @@ namespace Projet_Cavalier
             else
             {
                 effacerEchiquier();
-                echiquier[saisieI, saisieJ].BackgroundImage = cavalier;
-                desactiverEchiquier();
+                echiquier[saisieI, saisieJ].BackgroundImage = cavalier;             
                 label1.Text = "Cavalier dans une impasse !";
+                if (cptRetour == 0) 
+                    desactiverEchiquier();
             }
 
             if (cptTour == 1)
