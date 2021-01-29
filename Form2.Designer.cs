@@ -36,12 +36,12 @@
             this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.règlesDuJeuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.quitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.paramètreDuJeuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.couleurDuDamierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.noirBlancToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jauneEtChocolatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bleuEtRougeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.quitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button3 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -125,6 +125,13 @@
             this.règlesDuJeuToolStripMenuItem.Text = "Règles du jeu";
             this.règlesDuJeuToolStripMenuItem.Click += new System.EventHandler(this.règlesDuJeuToolStripMenuItem_Click);
             // 
+            // quitterToolStripMenuItem
+            // 
+            this.quitterToolStripMenuItem.Name = "quitterToolStripMenuItem";
+            this.quitterToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.quitterToolStripMenuItem.Text = "Quitter";
+            this.quitterToolStripMenuItem.Click += new System.EventHandler(this.quitterToolStripMenuItem_Click);
+            // 
             // paramètreDuJeuToolStripMenuItem
             // 
             this.paramètreDuJeuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -163,12 +170,6 @@
             this.bleuEtRougeToolStripMenuItem.Size = new System.Drawing.Size(250, 34);
             this.bleuEtRougeToolStripMenuItem.Text = "Bleu et rouge";
             this.bleuEtRougeToolStripMenuItem.Click += new System.EventHandler(this.bleuEtRougeToolStripMenuItem_Click);
-            // 
-            // quitterToolStripMenuItem
-            // 
-            this.quitterToolStripMenuItem.Name = "quitterToolStripMenuItem";
-            this.quitterToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.quitterToolStripMenuItem.Text = "Quitter";
             // 
             // button3
             // 

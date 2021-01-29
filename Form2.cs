@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -35,6 +36,7 @@ namespace Projet_Cavalier
          */
         private void Form2_Load(object sender, EventArgs e)
         {
+
             this.cptTour = 0;
             this.cptRetour = 5;
             this.cavalier = Image.FromFile("img\\cavalier.jpg");
@@ -160,6 +162,9 @@ namespace Projet_Cavalier
                 label1.Text = "Cavalier dans une impasse !";
                 if (cptRetour == 0) 
                     desactiverEchiquier();
+                ++cptTour;
+                dernierI[cptTour] = saisieI;
+                dernierJ[cptTour] = saisieJ;
             }
 
             if (cptTour == 1)
@@ -264,6 +269,11 @@ namespace Projet_Cavalier
                     echiquier[l, c].Enabled = true;
                 }
             }
+        }
+
+        private void quitterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         /*
