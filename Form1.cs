@@ -183,8 +183,7 @@ namespace Projet_Cavalier
                 jouer(gardeI, gardeJ, durée, pas);
             }
             else
-                label2.Text = "Partie en cours impossible de selectionner un autre boutton";
-                
+                label2.Text = "Partie en cours impossible de selectionner un autre boutton";       
         }
 
 
