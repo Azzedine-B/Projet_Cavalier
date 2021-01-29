@@ -28,6 +28,7 @@ namespace Projet_Cavalier
         int gardeI = 0, gardeJ = 0;
         int cptTour;
         int cptRetour;
+        Form1 f;
 
         /** 
          * Load formulaire 2
@@ -35,6 +36,7 @@ namespace Projet_Cavalier
          */
         private void Form2_Load(object sender, EventArgs e)
         {
+            f = new Form1();
             this.cptTour = 0;
             this.cptRetour = 5;
             this.cavalier = Image.FromFile("img\\cavalier.jpg");
@@ -101,10 +103,8 @@ namespace Projet_Cavalier
          */
         private void button2_Click(object sender, EventArgs e)
         {
-            effacerEchiquier();
-            activerEchiquier();
-            jouer(gardeI, gardeJ, 1000, 1);
-            button4.Enabled = false;
+            desactiverEchiquier();
+            f.Show();
         }
 
         /* Bouton qui permet de revenir en arrière
@@ -241,11 +241,6 @@ namespace Projet_Cavalier
                     else echiquier[i, j].BackColor = Color.FromArgb(255, 105, 51);
                 }
             }
-        }
-
-        private void quitterToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
 
         private void button3_Click(object sender, EventArgs e)

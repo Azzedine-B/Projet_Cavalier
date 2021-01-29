@@ -70,13 +70,23 @@ namespace Projet_Cavalier
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBox1.Text == "Pas de 5")
+            {
                 pas = 5;
+                label4.Visible = true;
+                comboBox2.Visible = true;
+            } 
             else if (comboBox1.Text == "Pas de 1")
+            {
                 pas = 1;
+                label4.Visible = true;
+                comboBox2.Visible = true;
+            } 
             else if (comboBox1.Text == "Un seul coup")
             {
                 pas = 1;
                 durée = 0;
+                comboBox2.Visible = false;
+                label4.Visible = false;
             }
                 
         }
@@ -124,6 +134,7 @@ namespace Projet_Cavalier
                 e.Cancel = true;
             else // DialogResult.Cancel
                 e.Cancel = true;
+
         }
 
         public Form1()
