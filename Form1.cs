@@ -100,18 +100,23 @@ namespace Projet_Cavalier
                 switch (comboBox2.Text)
                 {
                     case "0 secondes":
+                        comboBox2.SelectedIndex = 0;
                         durée = 0;
                         break;
                     case "1 seconde":
+                        comboBox2.SelectedIndex = 1;
                         durée = 1000;
                         break;
                     case "2 secondes":
+                        comboBox2.SelectedIndex = 2;
                         durée = 2000;
                         break;
                     case "5 secondes":
+                        comboBox2.SelectedIndex = 3;
                         durée = 5000;
                         break;
                     default:
+                        comboBox2.SelectedIndex = 4;
                         durée = 1000;
                         break;
                 }
