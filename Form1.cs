@@ -19,8 +19,7 @@ namespace Projet_Cavalier
         Image cavalier;
         bool pause = false;
         int gardeI = 0, gardeJ = 0;
-        int pas;
-        int durée;
+        int pas, durée;
         bool enCours;
 
 
@@ -54,14 +53,12 @@ namespace Projet_Cavalier
             effacerEchiquier();
             
             Random random = new Random();
-            int iR = random.Next(1, 8) + 1;
-            int jR = random.Next(1, 8) + 1;
-            // iR et jR evoluent de 2 à 9 !
            
-            gardeI = iR;
-            gardeJ = jR;
+            gardeI = random.Next(1, 8) + 1;
+            gardeJ = random.Next(1, 8) + 1;
+            // iR et jR evoluent de 2 à 9 !
 
-            jouer(iR,jR, durée, pas);
+            jouer(gardeI,gardeJ, durée, pas);
 
         }
 
@@ -127,12 +124,12 @@ namespace Projet_Cavalier
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             DialogResult reponse = MessageBox.Show(
- "Voulez vous vraiment fermer cette fenetre ?",
- "Fermeture fenetre",
- MessageBoxButtons.YesNoCancel,
- MessageBoxIcon.Question,
- MessageBoxDefaultButton.Button3,
- MessageBoxOptions.RightAlign);
+            "Voulez vous vraiment fermer cette fenetre ?",
+            "Fermeture fenetre",
+            MessageBoxButtons.YesNoCancel,
+            MessageBoxIcon.Question,
+            MessageBoxDefaultButton.Button3,
+            MessageBoxOptions.RightAlign);
             if (reponse == DialogResult.Yes)
                 ;
             else if (reponse == DialogResult.No)
@@ -152,6 +149,8 @@ namespace Projet_Cavalier
             enCours = false;
             this.cavalier = Image.FromFile("img\\cavalier.jpg");
             this.echiquier = new Button[12, 12];
+            comboBox1.SelectedIndex = comboBox2.SelectedIndex = 0;
+
             // initialisation des boutton de l'échiquier
             for (int l = 0; l < 12; l++)
             {
@@ -168,8 +167,6 @@ namespace Projet_Cavalier
                     this.Controls.Add(b); // ??
                 }
             }
-
-            comboBox1.SelectedIndex = comboBox2.SelectedIndex = 0;
    
         }
 
@@ -184,7 +181,7 @@ namespace Projet_Cavalier
                 gardeI = trouverI(sender, echiquier);
                 gardeJ = trouverJ(sender, echiquier);
 
-                jouer(trouverI(sender, echiquier), trouverJ(sender, echiquier), durée, pas);
+                jouer(gardeI, gardeJ, durée, pas);
             }
             else
                 label2.Text = "Partie en cours impossible de selectionner un autre boutton";
