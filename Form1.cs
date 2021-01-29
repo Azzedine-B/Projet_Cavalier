@@ -62,8 +62,6 @@ namespace Projet_Cavalier
 
         }
 
-
-
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBox1.Text == "Pas de 5")
@@ -146,6 +144,7 @@ namespace Projet_Cavalier
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            button1.Enabled = false;
             enCours = false;
             this.cavalier = Image.FromFile("img\\cavalier.jpg");
             this.echiquier = new Button[12, 12];
@@ -253,14 +252,9 @@ namespace Projet_Cavalier
                 for (j = 0; j < 12; j++)
                     echec[i, j] = ((i < 2 | i > 9 | j < 2 | j > 9) ? -1 : 0);
 
-
             echec[ip, jp] = 1;
             echiquier[ip, jp].BackgroundImage = cavalier;
             await Task.Delay(duree);
-
-           
-            
-
 
             for (k = 2; k <= 64; k++)
             {
@@ -303,7 +297,6 @@ namespace Projet_Cavalier
                     await Task.Delay(duree);
                 }
             }
-
             button5.Enabled = button1.Enabled =  true;
             enCours = false;
         }

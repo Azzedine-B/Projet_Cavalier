@@ -114,21 +114,22 @@ namespace Projet_Cavalier
          */
         private void button4_Click(object sender, EventArgs e)
         {
-            cptRetour--;
-            button4.Text = "Retour en arrière" + "(" + cptRetour + ")";
-            if (cptRetour > 0)
+            if (cptRetour > 1)
             {
                 cptTour--;
                 effacerEchiquier();
+                echiquier[saisieI, saisieJ].Enabled = true;
                 echiquier[dernierI[cptTour], dernierJ[cptTour]].BackgroundImage = cavalier;
-                echiquier[dernierI[cptTour], dernierJ[cptTour]].Enabled = true;
-                afficherFuite(dernierI[cptTour], dernierJ[cptTour]); 
+                echiquier[dernierI[cptTour], dernierJ[cptTour]].Enabled = false;
+                afficherFuite(dernierI[cptTour], dernierJ[cptTour]);
+                cptRetour--;
             }
             else
             {
                 label1.Text = "Plus de retours en arrière possibles"; 
                 button4.Enabled = false;
             }
+            button4.Text = "Retour en arrière" + "(" + cptRetour + ")";
         }
 
         /*
@@ -157,14 +158,16 @@ namespace Projet_Cavalier
             }
             else
             {
-                effacerEchiquier();
-                echiquier[saisieI, saisieJ].BackgroundImage = cavalier;             
-                label1.Text = "Cavalier dans une impasse !";
-                if (cptRetour == 0) 
-                    desactiverEchiquier();
                 ++cptTour;
                 dernierI[cptTour] = saisieI;
                 dernierJ[cptTour] = saisieJ;
+                effacerEchiquier();
+                echiquier[saisieI, saisieJ].BackgroundImage = cavalier;
+                echiquier[saisieI, saisieJ].Enabled = false;
+                label1.Text = "Cavalier dans une impasse !";
+                if (cptRetour == 0) 
+                    desactiverEchiquier();
+                
             }
 
             if (cptTour == 1)
@@ -172,6 +175,9 @@ namespace Projet_Cavalier
                 this.gardeI = saisieI;
                 this.gardeJ = saisieJ;
             }
+
+            if (cptTour == 5)
+                button4.Enabled = true;
         }
 
         /** Fonction de jeu
@@ -181,7 +187,6 @@ namespace Projet_Cavalier
         public void jouerModeJoueur(int ip, int jp)
         {
             effacerEchiquier();
-            button4.Enabled = true;
             echiquier[ip,jp].BackgroundImage = cavalier;
             echiquier[ip,jp].Enabled = false;
             afficherFuite(ip, jp);
