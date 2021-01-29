@@ -81,7 +81,8 @@ namespace Projet_Cavalier
          */
         private void button1_Click(object sender, EventArgs e)
         {
-            effacerEchiquier();
+            label1.Text = "";
+            //effacerEchiquier();
             Random random = new Random();
             int iR = random.Next(1, 8) + 1;
             int jR = random.Next(1, 8) + 1;
@@ -111,12 +112,12 @@ namespace Projet_Cavalier
          * Désactive le bouton lorsque le joueur a utilisé toutes ses tentatives de retour
          */
         private void button4_Click(object sender, EventArgs e)
-        {            
+        {
+            cptRetour--;
             button4.Text = "Retour en arrière" + "(" + cptRetour + ")";
             if (cptRetour > 0)
             {
                 cptTour--;
-                cptRetour--;
                 effacerEchiquier();
                 echiquier[dernierI[cptTour], dernierJ[cptTour]].BackgroundImage = cavalier;
                 echiquier[dernierI[cptTour], dernierJ[cptTour]].Enabled = true;
@@ -242,6 +243,35 @@ namespace Projet_Cavalier
             }
         }
 
+        private void quitterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            button1.Enabled = button2.Enabled = button3.Enabled = true;
+            effacerEchiquier();
+            this.cptTour = 0;
+            this.cptRetour = 5;
+            this.label1.Text = "Choisissez une case ou cliquez pour en générer une aléatoirement";
+            this.button2.Enabled = false;
+            this.button4.Enabled = false;
+            //initialisation des cases d'échecs
+            for (i = 0; i < 12; i++)
+                for (j = 0; j < 12; j++)
+                    echec[i, j] = ((i < 2 | i > 9 | j < 2 | j > 9) ? -1 : 0);
+
+            // initialisation des boutton de l'échiquier
+            for (int l = 2; l < 10; l++)
+            {
+                for (int c = 2; c < 10; c++)
+                {
+                    echiquier[l, c].Enabled = true;
+                }
+            }
+        }
+
         /*
          * Vérifie si le cavalier est dans une impasse 
          */
@@ -254,6 +284,7 @@ namespace Projet_Cavalier
                     --n;
             return n == 0;
         }
+
 
         /*
          * affiche les fuites possible pour notre brave cavalier

@@ -19,6 +19,10 @@ namespace Projet_Cavalier
         Image cavalier;
         bool pause = false;
         int gardeI = 0, gardeJ = 0;
+        int pas;
+        int durée;
+        bool enCours;
+
 
         /* Echiqiuer console */
         static int[,] echec = new int[12, 12];
@@ -30,7 +34,8 @@ namespace Projet_Cavalier
         // mettre en pause le jeu a n'importe quel moment
         private void button4_Click(object sender, EventArgs e)
         {
-            pause = !pause;
+            if(enCours)
+                pause = !pause;
         }
 
         // joue la simulation précédente
@@ -38,14 +43,14 @@ namespace Projet_Cavalier
         {
             effacerEchiquier();
             // on récupère les valeur de la simulation précédente
-            jouer(gardeI, gardeJ, 1000, 1);
+            jouer(gardeI, gardeJ, durée, pas);
 
         }
 
         //mode aléatoire
         private void button5_Click(object sender, EventArgs e)
         {
-
+            
             effacerEchiquier();
             
             Random random = new Random();
@@ -56,7 +61,69 @@ namespace Projet_Cavalier
             gardeI = iR;
             gardeJ = jR;
 
-            jouer(iR,jR, 1000, 1);
+            jouer(iR,jR, durée, pas);
+
+        }
+
+
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.Text == "Pas de 5")
+                pas = 5;
+            else if (comboBox1.Text == "Pas de 1")
+                pas = 1;
+            else if (comboBox1.Text == "Un seul coup")
+            {
+                pas = 1;
+                durée = 0;
+            }
+                
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.Text == "Un seul coup")
+                label2.Text = "Simulation en un seul coup choisie. Seule durée possible : 0 secondes";
+            else
+            {
+                switch (comboBox2.Text)
+                {
+                    case "0 secondes":
+                        durée = 0;
+                        break;
+                    case "1 seconde":
+                        durée = 1000;
+                        break;
+                    case "2 secondes":
+                        durée = 2000;
+                        break;
+                    case "5 secondes":
+                        durée = 5000;
+                        break;
+                    default:
+                        durée = 1000;
+                        break;
+                }
+            }
+
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult reponse = MessageBox.Show(
+ "Voulez vous vraiment fermer cette fenetre ?",
+ "Fermeture fenetre",
+ MessageBoxButtons.YesNoCancel,
+ MessageBoxIcon.Question,
+ MessageBoxDefaultButton.Button3,
+ MessageBoxOptions.RightAlign);
+            if (reponse == DialogResult.Yes)
+                ;
+            else if (reponse == DialogResult.No)
+                e.Cancel = true;
+            else // DialogResult.Cancel
+                e.Cancel = true;
         }
 
         public Form1()
@@ -66,8 +133,8 @@ namespace Projet_Cavalier
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            enCours = false;
             this.cavalier = Image.FromFile("img\\cavalier.jpg");
-
             this.echiquier = new Button[12, 12];
             // initialisation des boutton de l'échiquier
             for (int l = 0; l < 12; l++)
@@ -85,26 +152,27 @@ namespace Projet_Cavalier
                     this.Controls.Add(b); // ??
                 }
             }
-            //a changer de place mais me permet de charger l'autre fenêtre
-            /*
-            Form2 ModeJeu = new Form2();
-            ModeJeu.Show();
-            */
-            Form3 azzedine = new Form3();
-            azzedine.Show();
+
+            comboBox1.SelectedIndex = comboBox2.SelectedIndex = 0;
+   
         }
 
         // choix de la case
         private void Mon_Bouton_Click(object sender, EventArgs e)
-        {  
+        {
+            if (!enCours)
+            {
+                effacerEchiquier();
 
-            effacerEchiquier();
+                // stocke les valeurs pour rejouer la simulation 
+                gardeI = trouverI(sender, echiquier);
+                gardeJ = trouverJ(sender, echiquier);
 
-            // stocke les valeurs pour rejouer la simulation 
-            gardeI = trouverI(sender, echiquier);
-            gardeJ = trouverJ(sender, echiquier);
-
-            jouer(trouverI(sender, echiquier), trouverJ(sender, echiquier), 1000, 1);
+                jouer(trouverI(sender, echiquier), trouverJ(sender, echiquier), durée, pas);
+            }
+            else
+                label2.Text = "Partie en cours impossible de selectionner un autre boutton";
+                
         }
 
 
@@ -165,6 +233,9 @@ namespace Projet_Cavalier
 
         public async void jouer(int ip, int jp, int duree, int pas)
         {
+            enCours = true;
+            button5.Enabled = button1.Enabled = false;
+
             for (i = 0; i < 12; i++)
                 for (j = 0; j < 12; j++)
                     echec[i, j] = ((i < 2 | i > 9 | j < 2 | j > 9) ? -1 : 0);
@@ -187,8 +258,15 @@ namespace Projet_Cavalier
                 }
 
                 echiquier[ip, jp].BackgroundImage = null;
-                if(k == 2 || k % pas == 1 || k % pas == 0)
+                if(pas == 5)
+                {
+                    if (k == 2 || k % pas == 1)
+                        echiquier[ip, jp].Text = "" + (k - 1);
+                }
+                else
+                {
                     echiquier[ip, jp].Text = "" + (k - 1);
+                }     
                 for (l = 0, min_fuite = 11; l < 8; l++)
                 {
                     ii = ip + depi[l]; jj = jp + depj[l];
@@ -213,7 +291,8 @@ namespace Projet_Cavalier
                 }
             }
 
-
+            button5.Enabled = button1.Enabled =  true;
+            enCours = false;
         }
     }
 }

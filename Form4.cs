@@ -21,7 +21,6 @@ namespace Projet_Cavalier
         {
             //form4.Text = "Menu principal";
             /* Initialisation */
-            Form3 azzedine = new Form3();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -35,5 +34,7 @@ namespace Projet_Cavalier
             Form2 ModeJeu = new Form2();
             ModeJeu.Show();
         }
+
+
     }
 }
