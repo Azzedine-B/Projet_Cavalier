@@ -28,7 +28,6 @@ namespace Projet_Cavalier
         int gardeI = 0, gardeJ = 0;
         int cptTour;
         int cptRetour;
-        Form1 f;
 
         /** 
          * Load formulaire 2
@@ -36,7 +35,6 @@ namespace Projet_Cavalier
          */
         private void Form2_Load(object sender, EventArgs e)
         {
-            f = new Form1();
             this.cptTour = 0;
             this.cptRetour = 5;
             this.cavalier = Image.FromFile("img\\cavalier.jpg");
@@ -103,8 +101,9 @@ namespace Projet_Cavalier
          */
         private void button2_Click(object sender, EventArgs e)
         {
-            desactiverEchiquier();
-            f.Show();
+            effacerEchiquier();
+            activerEchiquier();
+            jouer(gardeI, gardeJ, 1000, 1);
         }
 
         /* Bouton qui permet de revenir en arrière
